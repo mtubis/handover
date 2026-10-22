@@ -10,10 +10,15 @@ interface Props {
 export function SettingsForm({ initial, onSave, onCancel }: Props) {
   const [apiKey, setApiKey] = useState(initial.apiKey)
   const [parentLabel, setParentLabel] = useState(initial.parentLabel)
+  const [recipients, setRecipients] = useState(initial.recipients)
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault()
-    onSave({ apiKey: apiKey.trim(), parentLabel: parentLabel.trim() || 'mamy' })
+    onSave({
+      apiKey: apiKey.trim(),
+      parentLabel: parentLabel.trim() || 'mamy',
+      recipients: recipients.trim(),
+    })
   }
 
   return (
@@ -43,6 +48,18 @@ export function SettingsForm({ initial, onSave, onCancel }: Props) {
         onChange={(event) => setParentLabel(event.target.value)}
       />
       <p className="hint">Np. „mamy”, „taty”, „babci” — tak, jak w zdaniu „wizyta u mamy”.</p>
+
+      <label htmlFor="recipients">Adresy e-mail rodzeństwa (opcjonalnie)</label>
+      <input
+        id="recipients"
+        type="text"
+        inputMode="email"
+        autoComplete="off"
+        placeholder="ania@example.com, maciej@example.com"
+        value={recipients}
+        onChange={(event) => setRecipients(event.target.value)}
+      />
+      <p className="hint">Używane tylko wtedy, gdy telefon nie ma przycisku „Udostępnij”.</p>
 
       <div className="actions">
         <button type="submit" className="primary">

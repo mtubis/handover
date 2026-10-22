@@ -3,9 +3,10 @@ import { structure, transcribe } from './ai/groq'
 import { MessagePreview } from './components/MessagePreview'
 import { Recorder } from './components/Recorder'
 import { SettingsForm } from './components/SettingsForm'
+import { ShareActions } from './components/ShareActions'
 import type { Recording } from './components/useRecorder'
 import { describeError } from './lib/errors'
-import { formatMessage } from './lib/formatMessage'
+import { formatMessage, formatTitle } from './lib/formatMessage'
 import { loadSettings, saveSettings, type Settings } from './lib/settings'
 
 type Step = 'record' | 'transcribing' | 'transcript' | 'structuring' | 'message'
@@ -17,6 +18,7 @@ export default function App() {
   const [step, setStep] = useState<Step>('record')
   const [transcript, setTranscript] = useState('')
   const [message, setMessage] = useState('')
+  const [subject, setSubject] = useState('')
   const [error, setError] = useState<string | null>(null)
 
   function handleSave(next: Settings) {
@@ -46,7 +48,9 @@ export default function App() {
     setStep('structuring')
     try {
       const handover = await structure(transcript, settings.parentLabel, settings.apiKey)
-      setMessage(formatMessage(handover, settings.parentLabel, new Date()))
+      const visitDate = new Date()
+      setSubject(formatTitle(settings.parentLabel, visitDate))
+      setMessage(formatMessage(handover, settings.parentLabel, visitDate))
       setStep('message')
     } catch (cause) {
       showError(cause)
@@ -136,6 +140,11 @@ export default function App() {
           {step === 'message' && (
             <>
               <MessagePreview message={message} onChange={setMessage} />
+              <ShareActions
+                subject={subject}
+                message={message}
+                recipients={settings.recipients}
+              />
               <div className="actions">
                 <button type="button" onClick={() => setStep('transcript')}>
                   Wróć do notatki
