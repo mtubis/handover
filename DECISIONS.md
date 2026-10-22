@@ -90,3 +90,45 @@ All application code was written during the session.
 
 ## Decisions during implementation
 <!-- Append here as you go: what, why, what was rejected. -->
+
+### 9. Tooling: the template's oxlint, npm 11 for installs
+- `create-vite` 9 ships **oxlint** instead of ESLint in the `react-ts` template. Kept it: `npm run lint`
+  works with no extra dependencies. The template's tsconfig had no `"strict": true`, so it was added.
+- npm 10.8.2 crashed while resolving peer dependencies (`Cannot read properties of null (reading
+  'edgesOut')`, a known arborist bug). Dependencies were installed once with `npx npm@11`, with no global
+  install. The lockfile is standard and builds on Vercel.
+
+### 10. Structuring call: strict JSON schema on `gpt-oss-120b`
+- Checked in the Groq docs before writing the call, then confirmed with a real request:
+  `response_format: json_schema` with `strict: true` works for `openai/gpt-oss-120b`. Strict mode
+  requires every property in `required` and `additionalProperties: false`; `owner` is `["string", "null"]`.
+- `reasoning_effort: "low"` for latency. `reasoning_format` is not supported for gpt-oss on Groq, so
+  `include_reasoning: false` is used instead.
+- The docs don't say whether reasoning tokens count towards `max_completion_tokens`, so the limit is
+  generous (2000). `finish_reason: "length"` is shown as a readable error.
+- The type guard (`src/ai/handover.ts`) validates the response anyway. If strict mode had been
+  rejected, the fallback was `json_object`.
+
+### 11. Recording: file name from the recorder's actual MIME type
+- Chrome records WebM/Opus and Safari records MP4. Whisper detects the format from the file
+  extension, so the name comes from `recorder.mimeType` after recording, not from the requested type.
+- `MediaRecorder.start()` is called without a timeslice, which yields a single, complete file.
+
+### 12. UX choices within the spec
+- **Parent label entered in the genitive** ("mamy", "taty") and used verbatim in "wizyta u …" and
+  "Co u …". No declension logic, which could easily get Polish grammar wrong.
+- **Structuring starts on an explicit button** after the transcript has been read and corrected, so
+  the human approves the input as well as the output.
+- **"Wolę napisać notatkę"**: typing instead of recording. A fallback when speaking isn't possible,
+  and the way prompt changes were checked against `fixtures/transcripts/`.
+- **Default e-mail recipients**: one optional text field, used only for the `mailto:` fallback. It is
+  not a recipient list managed in the app, which is out of scope.
+- **Web Share sends only the text.** The title is already the first line, and some apps would show
+  `title` and `text` twice.
+
+### 13. Known prompt limitation (accepted for v1)
+- With the third fixture ("czwartek o 10, a nie, przepraszam o 11"), the model put the visit time
+  under "Nie sprawdzono" instead of using the corrected 11, despite a prompt rule about
+  self-corrections. Negations, owners and the observed/reported split were correct for all three
+  fixtures. Accepted because the message is editable; it is the first case for the planned prompt
+  evaluation set.
