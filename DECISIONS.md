@@ -121,8 +121,11 @@ All application code was written during the session.
   the human approves the input as well as the output.
 - **"Wolę napisać notatkę"**: typing instead of recording. A fallback when speaking isn't possible,
   and the way prompt changes were checked against `fixtures/transcripts/`.
-- **Default e-mail recipients**: one optional text field, used only for the `mailto:` fallback. It is
-  not a recipient list managed in the app, which is out of scope.
+- **Default e-mail recipients**: one optional text field, inserted into the `mailto:` link. It is not
+  a recipient list managed in the app, which is out of scope.
+- **"Wyślij e-mailem" is always shown, not only as a fallback** (a change from `SPEC.md`). Testing on
+  Android showed that with Web Share available, the e-mail option and the default recipients were
+  unreachable. Web Share stays the primary action when the browser supports it.
 - **Web Share sends only the text.** The title is already the first line, and some apps would show
   `title` and `text` twice.
 

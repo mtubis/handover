@@ -59,7 +59,7 @@ export function SettingsForm({ initial, onSave, onCancel }: Props) {
         value={recipients}
         onChange={(event) => setRecipients(event.target.value)}
       />
-      <p className="hint">Używane tylko wtedy, gdy telefon nie ma przycisku „Udostępnij”.</p>
+      <p className="hint">Wstawiane jako adresaci po wybraniu „Wyślij e-mailem”.</p>
 
       <div className="actions">
         <button type="submit" className="primary">

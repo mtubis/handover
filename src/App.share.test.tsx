@@ -48,9 +48,13 @@ describe('sharing the handover message', () => {
     expect(share).toHaveBeenCalledWith({
       text: expect.stringMatching(/^Handover · wizyta u mamy.*Pozdrawiam, Ola$/s),
     })
+    expect(screen.getByRole('link', { name: 'Wyślij e-mailem' })).toHaveAttribute(
+      'href',
+      expect.stringContaining('Pozdrawiam%2C%20Ola'),
+    )
   })
 
-  it('falls back to an e-mail link and copying when Web Share is unavailable', async () => {
+  it('offers the e-mail link and copying when Web Share is unavailable', async () => {
     const { user } = await prepareMessage()
 
     expect(screen.queryByRole('button', { name: 'Udostępnij' })).not.toBeInTheDocument()

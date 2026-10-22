@@ -16,8 +16,8 @@ The UI is in Polish. Scope: [`SPEC.md`](SPEC.md). Rationale: [`DECISIONS.md`](DE
 3. **Transcribe** with `whisper-large-v3-turbo` (Polish); the transcript is editable.
 4. **Prepare the message:** `openai/gpt-oss-120b` returns JSON (strict schema), which is validated and
    formatted into a Polish handover message; the message is editable.
-5. **Share** via the Web Share API (WhatsApp, SMS, …), or via a `mailto:` link and copy to clipboard
-   when Web Share is unavailable.
+5. **Share** via the Web Share API (WhatsApp, SMS, …) when available, or send it by e-mail (a `mailto:`
+   link with the default recipients from settings), or copy it to the clipboard.
 
 ## Privacy
 

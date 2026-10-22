@@ -36,15 +36,18 @@ export function ShareActions({ subject, message, recipients }: Props) {
   return (
     <>
       <div className="actions">
-        {canShare ? (
+        {canShare && (
           <button type="button" className="primary" onClick={handleShare}>
             Udostępnij
           </button>
-        ) : (
-          <a className="button primary" href={buildMailto(recipients, subject, message)}>
-            Wyślij e-mailem
-          </a>
         )}
+        {/* Always offered: the share sheet doesn't know the siblings' default e-mail addresses. */}
+        <a
+          className={canShare ? 'button' : 'button primary'}
+          href={buildMailto(recipients, subject, message)}
+        >
+          Wyślij e-mailem
+        </a>
         <button type="button" onClick={handleCopy}>
           Kopiuj
         </button>
