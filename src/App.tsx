@@ -1,12 +1,14 @@
 import { useState } from 'react'
-import { transcribe } from './ai/groq'
+import { structure, transcribe } from './ai/groq'
+import { MessagePreview } from './components/MessagePreview'
 import { Recorder } from './components/Recorder'
 import { SettingsForm } from './components/SettingsForm'
 import type { Recording } from './components/useRecorder'
 import { describeError } from './lib/errors'
+import { formatMessage } from './lib/formatMessage'
 import { loadSettings, saveSettings, type Settings } from './lib/settings'
 
-type Step = 'record' | 'transcribing' | 'transcript'
+type Step = 'record' | 'transcribing' | 'transcript' | 'structuring' | 'message'
 
 export default function App() {
   const [settings, setSettings] = useState<Settings>(loadSettings)
@@ -14,6 +16,7 @@ export default function App() {
   const [storageWarning, setStorageWarning] = useState(false)
   const [step, setStep] = useState<Step>('record')
   const [transcript, setTranscript] = useState('')
+  const [message, setMessage] = useState('')
   const [error, setError] = useState<string | null>(null)
 
   function handleSave(next: Settings) {
@@ -38,9 +41,23 @@ export default function App() {
     }
   }
 
+  async function handlePrepareMessage() {
+    setError(null)
+    setStep('structuring')
+    try {
+      const handover = await structure(transcript, settings.parentLabel, settings.apiKey)
+      setMessage(formatMessage(handover, settings.parentLabel, new Date()))
+      setStep('message')
+    } catch (cause) {
+      showError(cause)
+      setStep('transcript')
+    }
+  }
+
   function startOver() {
     setError(null)
     setTranscript('')
+    setMessage('')
     setStep('record')
   }
 
@@ -99,8 +116,32 @@ export default function App() {
                 onChange={(event) => setTranscript(event.target.value)}
               />
               <div className="actions">
+                <button
+                  type="button"
+                  className="primary"
+                  onClick={handlePrepareMessage}
+                  disabled={transcript.trim() === ''}
+                >
+                  Przygotuj wiadomość
+                </button>
                 <button type="button" onClick={startOver}>
                   Nagraj od nowa
+                </button>
+              </div>
+            </>
+          )}
+
+          {step === 'structuring' && <p aria-live="polite">Porządkuję notatkę…</p>}
+
+          {step === 'message' && (
+            <>
+              <MessagePreview message={message} onChange={setMessage} />
+              <div className="actions">
+                <button type="button" onClick={() => setStep('transcript')}>
+                  Wróć do notatki
+                </button>
+                <button type="button" onClick={startOver}>
+                  Nowa notatka
                 </button>
               </div>
             </>
