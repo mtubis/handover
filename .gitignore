@@ -3,3 +3,9 @@ dist/
 .env*
 .vercel/
 fixtures/audio/*
+*.log
+*.local
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
