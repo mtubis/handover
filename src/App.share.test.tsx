@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
 import App from './App'
 import type { Handover } from './ai/handover'
+import { saveLocale } from './i18n'
 import { saveSettings } from './lib/settings'
 
 const handover: Handover = {
@@ -21,6 +22,7 @@ vi.mock('./ai/groq', () => ({
 
 async function prepareMessage() {
   const user = userEvent.setup()
+  saveLocale('pl')
   saveSettings({ apiKey: 'test-key', parentLabel: 'mamy', recipients: 'ania@example.com' })
   render(<App />)
 
