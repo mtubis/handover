@@ -66,11 +66,15 @@ resuming work; update the checkboxes as steps are merged.
 - [x] `formatMessage` localised: headings, "reported by" label, spelled-out date via
       `Intl.DateTimeFormat`, per-language title template; empty parent label → per-language default.
 - [x] EN and DE fixtures in `fixtures/transcripts/`.
-- [ ] Manual check with a real key (by the user): paste each EN fixture as a typed note and check
-      negations, observed/reported and owners; record one English voice note. DE in step 4.
+- [x] Manual check with a real key (by the user): EN fixtures as typed notes (negations,
+      observed/reported, owners) and one English voice note — as expected. DE in step 4.
 
 ### 4. German — `feat/i18n-de` (#5)
-- [ ] `de.ts` and German message formatting.
+- [x] `de.ts` (informal "du", like the Polish UI) and German message formatting; `de` registered
+      for locale detection and the prompt.
+- [ ] Manual check with a real key (by the user): DE fixtures as typed notes and one German
+      voice note.
+- [ ] German wording reviewed by a native speaker (see open questions).
 
 ### 5. Welcome screen — `feat/onboarding` (#6)
 - [ ] First-visit screen: what Handover is, three steps (record → review → share), "does not

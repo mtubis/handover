@@ -128,6 +128,8 @@ These rules came out of testing the prompt before implementation: a simple test 
   immediately, without "Save" — on the first visit the settings form is the first screen, and it
   should be readable before it is filled in. Language names are shown in their own language.
 - The PWA manifest is shared by all languages, so it uses English.
+- **Tone:** the UI addresses the user informally in every language (Polish "ty", German "du"):
+  the app is used between family members, and the Polish UI already did so.
 
 ### 13. Note and message language follow the UI language
 - One language setting drives the UI, the Whisper `language` hint and the language of the generated

@@ -1,5 +1,5 @@
 /** Languages the app is translated into. The first one is the fallback. */
-export const LOCALES = ['en', 'pl'] as const
+export const LOCALES = ['en', 'pl', 'de'] as const
 
 export type Locale = (typeof LOCALES)[number]
 
@@ -9,6 +9,7 @@ export const FALLBACK_LOCALE: Locale = 'en'
 export const LOCALE_NAMES: Record<Locale, string> = {
   en: 'English',
   pl: 'Polski',
+  de: 'Deutsch',
 }
 
 const STORAGE_KEY = 'handover.locale'

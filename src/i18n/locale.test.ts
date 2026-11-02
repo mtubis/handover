@@ -8,6 +8,8 @@ describe('resolveLocale', () => {
     [['PL-pl'], 'pl'],
     [['en-GB'], 'en'],
     [['fr-FR', 'pl-PL', 'en-US'], 'pl'],
+    [['de-AT'], 'de'],
+    [['de-CH', 'en'], 'de'],
   ])('matches %j by base language → %s', (preferred, expected) => {
     expect(resolveLocale(preferred)).toBe(expected)
   })

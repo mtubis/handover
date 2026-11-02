@@ -60,3 +60,18 @@ describe('UI language', () => {
     expect(screen.getByLabelText('Język')).toHaveDisplayValue('Polski')
   })
 })
+
+describe('German UI', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('is used for a German-speaking browser in any region', () => {
+    vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['de-AT', 'en'])
+    render(<App />)
+
+    expect(screen.getByLabelText('Groq-API-Schlüssel')).toBeInTheDocument()
+    expect(screen.getByLabelText('Sprache')).toHaveDisplayValue('Deutsch')
+    expect(document.documentElement.lang).toBe('de')
+  })
+})

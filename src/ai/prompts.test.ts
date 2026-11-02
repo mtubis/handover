@@ -4,6 +4,7 @@ describe('buildSystemPrompt', () => {
   it.each([
     ['en', 'English'],
     ['pl', 'Polish'],
+    ['de', 'German'],
   ] as const)('asks for the handover in the UI language (%s)', (locale, language) => {
     expect(buildSystemPrompt(locale)).toContain(`Write every text value in ${language}`)
   })
