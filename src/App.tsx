@@ -5,13 +5,18 @@ import { Recorder } from './components/Recorder'
 import { SettingsForm } from './components/SettingsForm'
 import { ShareActions } from './components/ShareActions'
 import type { Recording } from './components/useRecorder'
+import { DEFAULT_LOCALE, I18nProvider, MESSAGES } from './i18n'
 import { describeError } from './lib/errors'
 import { formatMessage, formatTitle } from './lib/formatMessage'
 import { loadSettings, saveSettings, type Settings } from './lib/settings'
 
 type Step = 'record' | 'transcribing' | 'transcript' | 'structuring' | 'message'
 
+// Kept as the cause, not as text, so the message follows the current UI language.
+type ErrorState = { cause: unknown } | null
+
 export default function App() {
+  const t = MESSAGES[DEFAULT_LOCALE]
   const [settings, setSettings] = useState<Settings>(loadSettings)
   const [editingSettings, setEditingSettings] = useState(() => settings.apiKey === '')
   const [storageWarning, setStorageWarning] = useState(false)
@@ -19,7 +24,7 @@ export default function App() {
   const [transcript, setTranscript] = useState('')
   const [message, setMessage] = useState('')
   const [subject, setSubject] = useState('')
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<ErrorState>(null)
 
   function handleSave(next: Settings) {
     setStorageWarning(!saveSettings(next))
@@ -28,7 +33,7 @@ export default function App() {
   }
 
   function showError(cause: unknown) {
-    setError(describeError(cause))
+    setError({ cause })
   }
 
   async function handleRecorded(recording: Recording) {
@@ -66,97 +71,99 @@ export default function App() {
   }
 
   return (
-    <main className="app">
-      <header className="app-header">
-        <h1>Handover</h1>
-        {!editingSettings && (
-          <button type="button" className="link" onClick={() => setEditingSettings(true)}>
-            Ustawienia
-          </button>
+    <I18nProvider value={t}>
+      <main className="app">
+        <header className="app-header">
+          <h1>Handover</h1>
+          {!editingSettings && (
+            <button type="button" className="link" onClick={() => setEditingSettings(true)}>
+              {t.app.settingsLink}
+            </button>
+          )}
+        </header>
+        <p className="tagline">{t.app.tagline}</p>
+
+        {storageWarning && (
+          <p role="alert" className="error">
+            {t.app.storageWarning}
+          </p>
         )}
-      </header>
-      <p className="tagline">Jedna notatka głosowa. Wszyscy na bieżąco.</p>
 
-      {storageWarning && (
-        <p role="alert" className="error">
-          Nie udało się zapamiętać ustawień w przeglądarce — będą działać do zamknięcia strony.
-        </p>
-      )}
+        {editingSettings ? (
+          <SettingsForm
+            initial={settings}
+            onSave={handleSave}
+            onCancel={settings.apiKey ? () => setEditingSettings(false) : undefined}
+          />
+        ) : (
+          <section className="card">
+            <h2>{t.app.noteHeading(settings.parentLabel)}</h2>
 
-      {editingSettings ? (
-        <SettingsForm
-          initial={settings}
-          onSave={handleSave}
-          onCancel={settings.apiKey ? () => setEditingSettings(false) : undefined}
-        />
-      ) : (
-        <section className="card">
-          <h2>Notatka po wizycie u {settings.parentLabel}</h2>
+            {error && (
+              <p role="alert" className="error">
+                {describeError(error.cause, t.errors)}
+              </p>
+            )}
 
-          {error && (
-            <p role="alert" className="error">
-              {error}
-            </p>
-          )}
-
-          {step === 'record' && (
-            <>
-              <Recorder onRecorded={handleRecorded} onError={showError} />
-              <button type="button" className="link" onClick={() => setStep('transcript')}>
-                Wolę napisać notatkę
-              </button>
-            </>
-          )}
-
-          {step === 'transcribing' && <p aria-live="polite">Zamieniam nagranie na tekst…</p>}
-
-          {step === 'transcript' && (
-            <>
-              <label htmlFor="transcript">Twoja notatka (możesz poprawić)</label>
-              <textarea
-                id="transcript"
-                rows={8}
-                value={transcript}
-                onChange={(event) => setTranscript(event.target.value)}
-              />
-              <div className="actions">
-                <button
-                  type="button"
-                  className="primary"
-                  onClick={handlePrepareMessage}
-                  disabled={transcript.trim() === ''}
-                >
-                  Przygotuj wiadomość
+            {step === 'record' && (
+              <>
+                <Recorder onRecorded={handleRecorded} onError={showError} />
+                <button type="button" className="link" onClick={() => setStep('transcript')}>
+                  {t.app.typeInstead}
                 </button>
-                <button type="button" onClick={startOver}>
-                  Nagraj od nowa
-                </button>
-              </div>
-            </>
-          )}
+              </>
+            )}
 
-          {step === 'structuring' && <p aria-live="polite">Porządkuję notatkę…</p>}
+            {step === 'transcribing' && <p aria-live="polite">{t.app.transcribing}</p>}
 
-          {step === 'message' && (
-            <>
-              <MessagePreview message={message} onChange={setMessage} />
-              <ShareActions
-                subject={subject}
-                message={message}
-                recipients={settings.recipients}
-              />
-              <div className="actions">
-                <button type="button" onClick={() => setStep('transcript')}>
-                  Wróć do notatki
-                </button>
-                <button type="button" onClick={startOver}>
-                  Nowa notatka
-                </button>
-              </div>
-            </>
-          )}
-        </section>
-      )}
-    </main>
+            {step === 'transcript' && (
+              <>
+                <label htmlFor="transcript">{t.transcript.label}</label>
+                <textarea
+                  id="transcript"
+                  rows={8}
+                  value={transcript}
+                  onChange={(event) => setTranscript(event.target.value)}
+                />
+                <div className="actions">
+                  <button
+                    type="button"
+                    className="primary"
+                    onClick={handlePrepareMessage}
+                    disabled={transcript.trim() === ''}
+                  >
+                    {t.transcript.prepareMessage}
+                  </button>
+                  <button type="button" onClick={startOver}>
+                    {t.transcript.recordAgain}
+                  </button>
+                </div>
+              </>
+            )}
+
+            {step === 'structuring' && <p aria-live="polite">{t.app.structuring}</p>}
+
+            {step === 'message' && (
+              <>
+                <MessagePreview message={message} onChange={setMessage} />
+                <ShareActions
+                  subject={subject}
+                  message={message}
+                  recipients={settings.recipients}
+                />
+                <div className="actions">
+                  <button type="button" onClick={() => setStep('transcript')}>
+                    {t.message.backToNote}
+                  </button>
+                  <button type="button" onClick={startOver}>
+                    {t.message.newNote}
+                  </button>
+                </div>
+              </>
+            )}
+          </section>
+        )}
+      </main>
+    </I18nProvider>
   )
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { fileNameForMimeType, pickMimeType } from '../lib/audio'
-import { UserFacingError } from '../lib/errors'
+import { AppError } from '../lib/errors'
 
 export interface Recording {
   blob: Blob
@@ -33,7 +33,7 @@ export function useRecorder() {
 
   async function start(): Promise<void> {
     if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
-      throw new UserFacingError('Ta przeglądarka nie obsługuje nagrywania dźwięku.')
+      throw new AppError('recordingUnsupported')
     }
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
     const mimeType = pickMimeType((type) => MediaRecorder.isTypeSupported(type))
@@ -56,7 +56,7 @@ export function useRecorder() {
 
   function stop(): Promise<Recording> {
     const active = activeRef.current
-    if (!active) return Promise.reject(new UserFacingError('Nagrywanie nie jest aktywne.'))
+    if (!active) return Promise.reject(new AppError('notRecording'))
 
     return new Promise((resolve, reject) => {
       active.recorder.onstop = () => {
@@ -65,7 +65,7 @@ export function useRecorder() {
         const blob = new Blob(active.chunks, { type })
         release()
         if (blob.size === 0) {
-          reject(new UserFacingError('Nagranie jest puste. Spróbuj nagrać notatkę jeszcze raz.'))
+          reject(new AppError('emptyRecording'))
           return
         }
         resolve({ blob, fileName: fileNameForMimeType(type) })

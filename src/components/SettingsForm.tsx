@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
-import type { Settings } from '../lib/settings'
+import { useT } from '../i18n'
+import { DEFAULT_SETTINGS, type Settings } from '../lib/settings'
 
 interface Props {
   initial: Settings
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export function SettingsForm({ initial, onSave, onCancel }: Props) {
+  const t = useT()
   const [apiKey, setApiKey] = useState(initial.apiKey)
   const [parentLabel, setParentLabel] = useState(initial.parentLabel)
   const [recipients, setRecipients] = useState(initial.recipients)
@@ -16,16 +18,16 @@ export function SettingsForm({ initial, onSave, onCancel }: Props) {
     event.preventDefault()
     onSave({
       apiKey: apiKey.trim(),
-      parentLabel: parentLabel.trim() || 'mamy',
+      parentLabel: parentLabel.trim() || DEFAULT_SETTINGS.parentLabel,
       recipients: recipients.trim(),
     })
   }
 
   return (
     <form className="card" onSubmit={handleSubmit}>
-      <h2>Ustawienia</h2>
+      <h2>{t.settings.heading}</h2>
 
-      <label htmlFor="api-key">Klucz API Groq</label>
+      <label htmlFor="api-key">{t.settings.apiKeyLabel}</label>
       <input
         id="api-key"
         type="password"
@@ -35,39 +37,37 @@ export function SettingsForm({ initial, onSave, onCancel }: Props) {
         onChange={(event) => setApiKey(event.target.value)}
         required
       />
-      <p className="hint">
-        Klucz zostaje tylko na tym urządzeniu i jest wysyłany wyłącznie do api.groq.com.
-      </p>
+      <p className="hint">{t.settings.apiKeyHint}</p>
 
-      <label htmlFor="parent-label">Wizyta u…</label>
+      <label htmlFor="parent-label">{t.settings.parentLabelLabel}</label>
       <input
         id="parent-label"
         type="text"
-        placeholder="mamy"
+        placeholder={t.settings.parentLabelPlaceholder}
         value={parentLabel}
         onChange={(event) => setParentLabel(event.target.value)}
       />
-      <p className="hint">Np. „mamy”, „taty”, „babci” — tak, jak w zdaniu „wizyta u mamy”.</p>
+      <p className="hint">{t.settings.parentLabelHint}</p>
 
-      <label htmlFor="recipients">Adresy e-mail rodzeństwa (opcjonalnie)</label>
+      <label htmlFor="recipients">{t.settings.recipientsLabel}</label>
       <input
         id="recipients"
         type="text"
         inputMode="email"
         autoComplete="off"
-        placeholder="ania@example.com, maciej@example.com"
+        placeholder={t.settings.recipientsPlaceholder}
         value={recipients}
         onChange={(event) => setRecipients(event.target.value)}
       />
-      <p className="hint">Wstawiane jako adresaci po wybraniu „Wyślij e-mailem”.</p>
+      <p className="hint">{t.settings.recipientsHint}</p>
 
       <div className="actions">
         <button type="submit" className="primary">
-          Zapisz
+          {t.settings.save}
         </button>
         {onCancel && (
           <button type="button" onClick={onCancel}>
-            Anuluj
+            {t.settings.cancel}
           </button>
         )}
       </div>

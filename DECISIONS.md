@@ -109,3 +109,16 @@ These rules came out of testing the prompt before implementation: a simple test 
   self-corrections. Negations, owners and the observed/reported split were correct for all three
   fixtures. Accepted because the message is editable; it is the first case for the planned prompt
   evaluation set.
+
+### 12. Internationalization: in-house typed dictionaries
+- The UI is translated through plain TypeScript objects (`src/i18n/`), one per language, each
+  checked against a shared `Messages` interface with `satisfies`. A missing or misspelled key is a
+  compile error, not a blank label at runtime.
+- Strings that take values are functions (`noteHeading: (parentLabel) => ...`), so each language
+  can place the value where its grammar needs it and the arguments are type-checked. No
+  interpolation syntax to parse.
+- Rejected: `i18next` / `react-i18next` and `FormatJS`. With three languages, a few dozen strings
+  and no plurals, they add dependencies and runtime lookups by string key without solving a
+  problem the type system doesn't already solve.
+- Errors carry a code (`AppError`) instead of a ready sentence; the text is chosen when the error
+  is shown, so it follows the language the user has selected at that moment.
