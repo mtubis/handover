@@ -7,7 +7,7 @@ records a short voice note and the app turns it into a structured message for th
 parent is doing, what was done, what the next person takes over and what was not checked — ready to
 share with a single tap.
 
-The UI is in Polish. Scope: [`SPEC.md`](SPEC.md). Rationale: [`DECISIONS.md`](DECISIONS.md).
+The UI is currently in Polish; English and German versions are in progress. Scope: [`SPEC.md`](SPEC.md). Rationale: [`DECISIONS.md`](DECISIONS.md).
 
 ## How it works
 
@@ -24,8 +24,8 @@ The UI is in Polish. Scope: [`SPEC.md`](SPEC.md). Rationale: [`DECISIONS.md`](DE
 - No backend, no database, no analytics. Notes, transcripts and messages exist only in the page's
   memory and disappear when it is closed.
 - The only network traffic with note content is the call to the Groq API.
-- The API key is stored in `localStorage` on the device. This fits a bring-your-own-key prototype;
-  a production version would call the AI through a backend with a server-side key.
+- The API key is stored in `localStorage` on the device. This fits the bring-your-own-key model;
+  a version with shared access would call the AI through a backend with a server-side key.
 - The app does not diagnose anything: the prompt forbids medical interpretation, recommendations,
   urgency assessment and invented people or dates.
 
@@ -58,7 +58,7 @@ src/ai/          provider layer: config (model IDs), Groq calls, prompt + JSON s
 src/lib/         pure functions: message formatting, mailto:, audio MIME helpers, error messages, settings
 src/components/  settings form, recorder (+ MediaRecorder hook), message preview, share actions
 fixtures/        sample transcripts (audio is git-ignored)
-spikes/          pre-session Groq browser test, not part of the app
+spikes/          Groq browser test done before implementation, not part of the app
 ```
 
 ## Tests

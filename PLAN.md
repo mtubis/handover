@@ -31,16 +31,16 @@ resuming work; update the checkboxes as steps are merged.
 ## Steps
 
 ### 0. Documentation cleanup — `docs/cleanup` (#1)
-- [ ] `CLAUDE.md`: remove the "Working context" section (time-boxed exercise, ~2 h limit); replace it
-      with "deliver in small, verified steps". Update the "no persistent storage" constraint (see step 8)
-      and the "UI in Polish" rule (UI is multilingual).
-- [ ] `SPEC.md`: remove the time plan and the cut order; turn "v1 (within the 2 h limit)" into the
-      current testing scope and "Later" into a roadmap.
-- [ ] `DECISIONS.md`: remove section 2 ("Considered and rejected") and the problem-selection
-      comparison; keep the product rationale. Remove section 8 ("Preparation before the clock
-      started"). Rephrase rationales that relied on the time limit to state the real reason.
-- [ ] `README.md`: drop "The UI is in Polish" and "prototype" wording.
-- [ ] Check `spikes/` and remaining docs for time-limit / session wording.
+- [x] `CLAUDE.md`: replace the "Working context" section (time-boxed exercise, ~2 h limit) with
+      "deliver in small, verified steps", the branch workflow and a pointer to this plan; the
+      "UI in Polish" rule now requires a multilingual UI. The "no persistent storage" constraint and
+      `language=pl` still describe the current code and change in steps 8 and 3.
+- [x] `SPEC.md`: remove the time plan and the cut order; "v1 (within the 2 h limit)" is now the
+      current testing scope and "Later" is "Next".
+- [x] `DECISIONS.md`: remove "Considered and rejected" and "Preparation before the clock started";
+      rephrase rationales that relied on the time limit or the brief; renumber sections.
+- [x] `README.md`: "The UI is in Polish" now says EN/DE are in progress; drop "prototype" wording.
+- [x] Check `spikes/` and remaining docs for time-limit / session wording.
 - [x] Untracked files: the session log was moved out of the repo; `ONBOARDING.md` is an internal
       file, kept untracked (ignored locally via `.git/info/exclude`).
 
