@@ -45,11 +45,13 @@ resuming work; update the checkboxes as steps are merged.
       file, kept untracked (ignored locally via `.git/info/exclude`).
 
 ### 1. i18n infrastructure, no behaviour change — `feat/i18n-core` (#2)
-- [ ] `src/i18n/{en,pl,de}.ts`; `en` is the reference, others typed with `satisfies` so a missing key
-      fails the typecheck. React context + `useT()` hook.
-- [ ] Move all Polish UI strings to `pl.ts`. Replace Polish messages in `UserFacingError` /
-      `describeError` with error codes translated at render time.
-- [ ] Existing tests still pass; the app looks exactly the same.
+- [x] A language-neutral `Messages` interface (`src/i18n/messages.ts`); each dictionary is typed
+      with `satisfies Messages`, so a missing key fails the typecheck. Strings with values are
+      functions. React context + `useT()` hook. `en.ts` and `de.ts` come in steps 2 and 4.
+- [x] Move all Polish UI strings to `pl.ts`. `UserFacingError` is replaced by `AppError(code)`;
+      `describeError` translates codes at render time and the app keeps the error cause, not text.
+- [x] Existing tests still pass; the app looks exactly the same. Message content
+      (`formatMessage`, prompt) stays Polish until step 3.
 
 ### 2. Locale detection, language picker, English — `feat/i18n-locale` (#3)
 - [ ] Pure `resolveLocale(languages, supported)` with unit tests.

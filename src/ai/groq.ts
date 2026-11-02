@@ -1,4 +1,4 @@
-import { ApiError, UserFacingError } from '../lib/errors'
+import { ApiError, AppError } from '../lib/errors'
 import { AI_CONFIG } from './config'
 import { parseHandover, type Handover } from './handover'
 import { HANDOVER_JSON_SCHEMA, STRUCTURING_SYSTEM_PROMPT, buildUserMessage } from './prompts'
@@ -61,7 +61,7 @@ export async function structure(
   })) as ChatCompletion
   const choice = data.choices?.[0]
   if (choice?.finish_reason === 'length') {
-    throw new UserFacingError('Notatka jest za długa do uporządkowania. Skróć ją i spróbuj ponownie.')
+    throw new AppError('noteTooLong')
   }
   return parseHandover(choice?.message?.content ?? '')
 }
