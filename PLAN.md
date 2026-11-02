@@ -41,7 +41,8 @@ resuming work; update the checkboxes as steps are merged.
       started"). Rephrase rationales that relied on the time limit to state the real reason.
 - [ ] `README.md`: drop "The UI is in Polish" and "prototype" wording.
 - [ ] Check `spikes/` and remaining docs for time-limit / session wording.
-- [ ] Decide on untracked files (see open questions).
+- [x] Untracked files: the session log was moved out of the repo; `ONBOARDING.md` is an internal
+      file, kept untracked (ignored locally via `.git/info/exclude`).
 
 ### 1. i18n infrastructure, no behaviour change — `feat/i18n-core` (#2)
 - [ ] `src/i18n/{en,pl,de}.ts`; `en` is the reference, others typed with `satisfies` so a missing key
@@ -101,8 +102,6 @@ resuming work; update the checkboxes as steps are merged.
 
 ## Open questions
 
-- Untracked `ONBOARDING.md` (written in Polish) and the pasted session log in the repo root:
-  translate, delete or git-ignore?
 - Who reviews the German translation and sample message?
 - Demo mode without an API key (sample transcript and message from fixtures, no API calls) in this
   release?
