@@ -1,14 +1,17 @@
 import { useState, type FormEvent } from 'react'
-import { useT } from '../i18n'
+import { LOCALES, LOCALE_NAMES, isLocale, useT, type Locale } from '../i18n'
 import { DEFAULT_SETTINGS, type Settings } from '../lib/settings'
 
 interface Props {
   initial: Settings
+  locale: Locale
+  /** Applied immediately, so the rest of the form can be read in the chosen language. */
+  onLocaleChange: (locale: Locale) => void
   onSave: (settings: Settings) => void
   onCancel?: () => void
 }
 
-export function SettingsForm({ initial, onSave, onCancel }: Props) {
+export function SettingsForm({ initial, locale, onLocaleChange, onSave, onCancel }: Props) {
   const t = useT()
   const [apiKey, setApiKey] = useState(initial.apiKey)
   const [parentLabel, setParentLabel] = useState(initial.parentLabel)
@@ -26,6 +29,21 @@ export function SettingsForm({ initial, onSave, onCancel }: Props) {
   return (
     <form className="card" onSubmit={handleSubmit}>
       <h2>{t.settings.heading}</h2>
+
+      <label htmlFor="locale">{t.settings.languageLabel}</label>
+      <select
+        id="locale"
+        value={locale}
+        onChange={(event) => {
+          if (isLocale(event.target.value)) onLocaleChange(event.target.value)
+        }}
+      >
+        {LOCALES.map((option) => (
+          <option key={option} value={option} lang={option}>
+            {LOCALE_NAMES[option]}
+          </option>
+        ))}
+      </select>
 
       <label htmlFor="api-key">{t.settings.apiKeyLabel}</label>
       <input

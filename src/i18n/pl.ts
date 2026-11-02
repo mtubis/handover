@@ -15,6 +15,7 @@ export const pl = {
     heading: 'Ustawienia',
     apiKeyLabel: 'Klucz API Groq',
     apiKeyHint: 'Klucz zostaje tylko na tym urządzeniu i jest wysyłany wyłącznie do api.groq.com.',
+    languageLabel: 'Język',
     parentLabelLabel: 'Wizyta u…',
     parentLabelPlaceholder: 'mamy',
     parentLabelHint: 'Np. „mamy”, „taty”, „babci” — tak, jak w zdaniu „wizyta u mamy”.',

@@ -122,3 +122,9 @@ These rules came out of testing the prompt before implementation: a simple test 
   problem the type system doesn't already solve.
 - Errors carry a code (`AppError`) instead of a ready sentence; the text is chosen when the error
   is shown, so it follows the language the user has selected at that moment.
+- **Choosing the language:** the first browser language with a translation wins, matched by base
+  language (`de-AT` → `de`), so regional variants need no dictionaries of their own; otherwise
+  English. A choice made in Settings is stored separately from the API key settings and applies
+  immediately, without "Save" — on the first visit the settings form is the first screen, and it
+  should be readable before it is filled in. Language names are shown in their own language.
+- The PWA manifest is shared by all languages, so it uses English.

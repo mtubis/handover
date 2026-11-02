@@ -7,7 +7,9 @@ records a short voice note and the app turns it into a structured message for th
 parent is doing, what was done, what the next person takes over and what was not checked — ready to
 share with a single tap.
 
-The UI is currently in Polish; English and German versions are in progress. Scope: [`SPEC.md`](SPEC.md). Rationale: [`DECISIONS.md`](DECISIONS.md).
+The UI is available in English and Polish (German in progress): it follows the browser's language,
+falls back to English, and can be changed in Settings. The generated message is still in Polish for
+now. Scope: [`SPEC.md`](SPEC.md). Rationale: [`DECISIONS.md`](DECISIONS.md).
 
 ## How it works
 

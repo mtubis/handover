@@ -54,9 +54,10 @@ resuming work; update the checkboxes as steps are merged.
       (`formatMessage`, prompt) stays Polish until step 3.
 
 ### 2. Locale detection, language picker, English — `feat/i18n-locale` (#3)
-- [ ] Pure `resolveLocale(languages, supported)` with unit tests.
-- [ ] Language selector in settings, persisted; `<html lang>` kept in sync.
-- [ ] `en.ts` translation; RTL tests for detection and switching.
+- [x] Pure `resolveLocale(languages)` with unit tests; `loadLocale` / `saveLocale` (own storage key).
+- [x] Language selector in settings, applied immediately and persisted; `<html lang>` kept in sync.
+      `index.html` and the PWA manifest default to English.
+- [x] `en.ts` translation; RTL tests for detection, fallback and switching.
 
 ### 3. Note and message language — `feat/i18n-message` (#4)
 - [ ] Whisper language from settings instead of `AI_CONFIG.transcriptionLanguage: 'pl'`

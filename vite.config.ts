@@ -14,8 +14,9 @@ export default defineConfig({
       manifest: {
         name: 'Handover',
         short_name: 'Handover',
-        description: 'Jedna notatka głosowa. Wszyscy na bieżąco.',
-        lang: 'pl',
+        // One manifest for all UI languages, so it uses the fallback language.
+        description: 'One voice note. Everyone up to date.',
+        lang: 'en',
         start_url: '/',
         display: 'standalone',
         background_color: '#f1f5f4',

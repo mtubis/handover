@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { structure, transcribe } from './ai/groq'
 import { MessagePreview } from './components/MessagePreview'
 import { Recorder } from './components/Recorder'
 import { SettingsForm } from './components/SettingsForm'
 import { ShareActions } from './components/ShareActions'
 import type { Recording } from './components/useRecorder'
-import { DEFAULT_LOCALE, I18nProvider, MESSAGES } from './i18n'
+import { I18nProvider, MESSAGES, loadLocale, saveLocale, type Locale } from './i18n'
 import { describeError } from './lib/errors'
 import { formatMessage, formatTitle } from './lib/formatMessage'
 import { loadSettings, saveSettings, type Settings } from './lib/settings'
@@ -16,7 +16,8 @@ type Step = 'record' | 'transcribing' | 'transcript' | 'structuring' | 'message'
 type ErrorState = { cause: unknown } | null
 
 export default function App() {
-  const t = MESSAGES[DEFAULT_LOCALE]
+  const [locale, setLocale] = useState<Locale>(loadLocale)
+  const t = MESSAGES[locale]
   const [settings, setSettings] = useState<Settings>(loadSettings)
   const [editingSettings, setEditingSettings] = useState(() => settings.apiKey === '')
   const [storageWarning, setStorageWarning] = useState(false)
@@ -25,6 +26,15 @@ export default function App() {
   const [message, setMessage] = useState('')
   const [subject, setSubject] = useState('')
   const [error, setError] = useState<ErrorState>(null)
+
+  useEffect(() => {
+    document.documentElement.lang = locale
+  }, [locale])
+
+  function handleLocaleChange(next: Locale) {
+    setStorageWarning(!saveLocale(next))
+    setLocale(next)
+  }
 
   function handleSave(next: Settings) {
     setStorageWarning(!saveSettings(next))
@@ -92,6 +102,8 @@ export default function App() {
         {editingSettings ? (
           <SettingsForm
             initial={settings}
+            locale={locale}
+            onLocaleChange={handleLocaleChange}
             onSave={handleSave}
             onCancel={settings.apiKey ? () => setEditingSettings(false) : undefined}
           />

@@ -18,6 +18,7 @@ export interface Messages {
     heading: string
     apiKeyLabel: string
     apiKeyHint: string
+    languageLabel: string
     parentLabelLabel: string
     parentLabelPlaceholder: string
     parentLabelHint: string

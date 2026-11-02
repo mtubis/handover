@@ -65,12 +65,14 @@ label {
 }
 
 input,
+select,
 textarea,
 button {
   font: inherit;
 }
 
 input,
+select,
 textarea {
   width: 100%;
   padding: 12px;
