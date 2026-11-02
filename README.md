@@ -55,7 +55,8 @@ auto-deploys from `main`.
 
 ```
 src/ai/          provider layer: config (model IDs), Groq calls, prompt + JSON schema, response type guard
-src/lib/         pure functions: message formatting, mailto:, audio MIME helpers, error messages, settings
+src/i18n/        UI strings per language, typed against one Messages interface; useT() hook
+src/lib/         pure functions: message formatting, mailto:, audio MIME helpers, error mapping, settings
 src/components/  settings form, recorder (+ MediaRecorder hook), message preview, share actions
 fixtures/        sample transcripts (audio is git-ignored)
 spikes/          Groq browser test done before implementation, not part of the app
