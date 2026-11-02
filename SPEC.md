@@ -78,46 +78,25 @@ Warto zwrócić uwagę: ...
 
 ## Testing strategy
 
-### v1 (within the 2 h limit)
+### Current scope
 Goal: prove the critical logic and the most important UI behavior, not coverage.
 
 - **Unit tests (Vitest)** for pure functions:
   - parsing and validating the LLM JSON response (valid, missing fields, invalid JSON),
   - formatting the final message from the structured data (empty sections are omitted, owners rendered, negations kept in "Nie sprawdzono"),
   - building the `mailto:` link (encoding of subject and body).
-- **Component tests (React Testing Library)**, 1–2 tests with the AI layer mocked:
+- **Component tests (React Testing Library)** with the AI layer mocked:
+  - the API key is requested first and remembered,
   - the message preview is editable and "Share" sends the edited text,
   - when `navigator.share` is unavailable, the `mailto:` / copy fallback is shown.
-- Not tested in v1: `MediaRecorder`, real AI calls, cross-browser behavior (verified manually on a phone).
+- Not tested automatically: `MediaRecorder`, real AI calls, cross-browser behavior (verified manually on a phone).
 
-### Later (after the recruitment task)
+### Next
 - Full user-flow tests with the AI layer mocked (record → transcript → message → share), including error states.
 - Mock Service Worker (MSW) for the HTTP layer instead of module mocks.
 - Accessibility checks (e.g. `vitest-axe`).
 - A small prompt evaluation set run against fixtures (negations, reported vs observed, no invented owners).
 - Optional E2E (Playwright) for the happy path.
-
-## Time plan (~2 h, highest risk first)
-| Time | Step |
-|---|---|
-| 0–10 min | Review the plan in plan mode, correct it |
-| 10–25 | Vite + React + TS skeleton with Vitest + RTL, first push → Vercel deploy, settings screen with the API key |
-| 25–55 | Recording → transcription, **verified on a phone via the Vercel deployment** |
-| 55–80 | Prompt + structuring + editable preview, unit tests for parsing and formatting |
-| 80–95 | Web Share + `mailto:` + copy, RTL tests for preview and fallback |
-| 95–110 | Final deploy, test on a phone, screenshots |
-| 110–120 | README, submission note, log export |
-
-**Checkpoint at minute 60:** if transcription does not work on a phone, cut according to the list below.
-
-## Cut order (first to go → last to go)
-1. PWA manifest / install to home screen.
-2. Remembered parent name and default `mailto:` recipients.
-3. RTL component tests (unit tests for pure functions stay).
-4. Transcript editing (editing the final message stays).
-5. `source` (observed/reported) and `owner` fields, and splitting observations into areas.
-
-Core that is never cut: recording → transcription → message with "done / to take over / not checked" → sharing, plus unit tests for response parsing.
 
 ## Out of scope (deliberately)
 - Server-side sending (email, SMS, WhatsApp API).
@@ -128,5 +107,5 @@ Core that is never cut: recording → transcription → message with "done / to 
 - Any assessment of health status or urgency.
 
 ## Test data
-- `fixtures/audio/` — 3 sample voice notes recorded before the session (short; rambling with digressions; containing something worrying). May be git-ignored if the repository is public.
+- `fixtures/audio/` — 3 sample voice notes for manual testing (short; rambling with digressions; containing something worrying). Git-ignored.
 - `fixtures/transcripts/` — their transcripts, used for checking the prompt and as inputs for unit tests.

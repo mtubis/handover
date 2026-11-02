@@ -2,63 +2,48 @@
 
 > **One voice note. Everyone up to date.**
 
-Why this and not something else. Decisions made before implementation started, during problem selection and planning. Further decisions are appended during the work.
+Why the app is built the way it is: the main product and technical decisions, with the alternatives that were considered. The first part was settled before implementation; later decisions are appended as the work goes on.
 
-## 1. Problem choice: a handover after visiting an elderly parent
+## 1. The problem: a handover after visiting an elderly parent
 
 **Why this problem**
 - Real and common: care for a parent is shared among siblings, and information gets lost between visits.
 - Voice is justified here: the note is made on the way back from a visit, when typing is inconvenient and talking is easy.
-- **Value from the very first use** — a single note immediately produces a ready message for siblings. No need to wait weeks for data, as with diaries.
+- **Value from the very first use** — a single note immediately produces a ready message for siblings. No need to collect weeks of data first, as a diary would.
 - AI does more than transcription: it turns a rambling monologue into a handover — what was observed, what was done, **what the next person takes over**, and what was not checked. That is what separates the app from "Whisper + summary".
 - Low medical risk: the app organizes a layperson's observations; it does not assess health.
-- A linear flow, realistic to finish in 2 h.
 
 **Name:** "Handover" borrows from the shift handover practiced by nurses and doctors — a structured transfer of what the next person needs to know. Families caring for a parent do the same thing, just informally and without a tool.
 
-## 2. Considered and rejected
-
-| Idea | Why rejected |
-|---|---|
-| **Voice triage** | Urgency assessment by an LLM carries a risk of hallucinations with real consequences. Doing it responsibly requires clinical validation — not feasible in 2 h. |
-| **Medication reminders** | Mostly infrastructure (schedules, background notifications). Voice and AI would be add-ons rather than the core. |
-| **Navigating lab results** | Requires document parsing, and interpreting results gets close to medical advice. Results are easier to read than to listen to. |
-| **Pre-teleconsultation intake** | A good idea, but in 2 h it would at best be an early version of a multi-turn conversation. |
-| **Symptom diary / caregiver diary** | Value only appears after many entries — a demo would have to fake it with sample data. This idea evolved into Handover: an immediate message instead of a history. |
-| **Voice Q&A over a medication leaflet** | The most original candidate (photos of the leaflet → vision model → answer with a quote; no OCR/RAG needed since a leaflet fits in the context window). Rejected due to higher technical risk (photo quality of small print) and proximity to medical advice. A good candidate for a next step. |
-| **"Did I already take my pill?" for seniors** | A real problem, but STT errors on elderly speech translate directly into dosing risk. |
-| **Voice "help" button** | An emergency system that sometimes fails is worse than none — it creates a false sense of safety. Not for a prototype. |
-| **Gym workout log** | The strongest case for voice (hands busy), but further from health in the caregiving sense. |
-
-## 3. Delivery channel: Web Share API + `mailto:`, no server-side sending
+## 2. Delivery channel: Web Share API + `mailto:`, no server-side sending
 
 - **Families already have their channels** (most often a WhatsApp group). The app should not force a new one — Web Share lets the user pick any of them.
 - Zero backend, zero providers, trivial testing.
 - Considered and rejected:
   - **Server-side email (Resend, SendGrid, Mailgun):** free tiers usually require domain verification to send to arbitrary addresses; adds a backend and spam-filter risk.
   - **SMS (Twilio):** trial accounts only send to verified numbers; beyond that it costs money.
-  - **WhatsApp Business API:** Meta setup and message templates — disproportionate for a prototype.
+  - **WhatsApp Business API:** Meta setup and message templates — disproportionate for an app without a backend.
 - Cost of this decision: the user has to tap "send" and choose recipients themselves. Acceptable.
 
-## 4. Architecture: PWA without a backend
+## 3. Architecture: PWA without a backend
 
-- Notes about a parent's health are sensitive data. **No server = no storage** — data does not leave the device except for the AI API call. This is a product decision (privacy, GDPR), not just a time shortcut.
+- Notes about a parent's health are sensitive data. **No server = no storage** — data does not leave the device except for the AI API call. This is a product decision (privacy, GDPR).
 - PWA instead of a native app: the caregiver does not need to install anything from an app store; recording (MediaRecorder) and Web Share work in mobile Chrome and Safari over HTTPS.
 - A deliberate choice despite the author's backend background (PHP/Symfony, Python): a backend would add nothing here and would increase the risk surface.
-- **Known limitation:** the API key is stored in `localStorage` and used from the browser. This matches the brief's requirement (users bring their own keys); in production, calls would go through a backend with a server-side key.
+- **Known limitation:** the API key is stored in `localStorage` and used from the browser. Users bring their own keys, so no shared key and no user data ever sit on a server; a version with shared access would call the AI through a backend with a server-side key.
 
-## 5. AI provider: Groq — verified before the session
+## 4. AI provider: Groq — verified before implementation
 
-- One key covers transcription and the LLM for structuring — less configuration for both the user and the reviewer. Free tier, low latency.
+- One key covers transcription and the LLM for structuring — less configuration for the user. Free tier, low latency.
 - **Verified with a standalone test page** (`spikes/groq-browser-test.html`, plain `fetch`, no SDK, served from `http://localhost:8000` via `python3 -m http.server`):
   - `GET /models`, `POST /chat/completions` and `POST /audio/transcriptions` all work directly from the browser — **no proxy needed**.
   - Transcription: `whisper-large-v3-turbo` produced an accurate Polish transcript of a test recording.
   - Structuring: `openai/gpt-oss-120b` organized a test note correctly. The initially assumed `llama-3.3-70b-versatile` was not available on the account's model list — a reminder not to hard-code model IDs from memory.
 - Plain `fetch` instead of an SDK: Groq's API is OpenAI-compatible, two endpoints do not justify a dependency.
 - Integration sits behind a thin `src/ai/` layer; model IDs live in one config module so they can be swapped (e.g. for OpenAI).
-- To confirm during implementation: support for JSON output mode and reasoning-effort settings for `gpt-oss-120b` on Groq. The response is validated by a type guard regardless.
+- JSON output mode and reasoning-effort settings for `gpt-oss-120b` were confirmed during implementation (see "Structuring call" below). The response is validated by a type guard regardless.
 
-## 6. Content safety and handover structure
+## 5. Content safety and handover structure
 
 - The LLM organizes only what was said in the note; missing information = an empty field. No invented people or dates.
 - **Negations are preserved** and surfaced as "not checked". In a handover, "I didn't check the meds" is as important as what was done — losing a negation would create a false sense that something was handled.
@@ -66,39 +51,28 @@ Why this and not something else. Decisions made before implementation started, d
 - No diagnoses, recommendations, or urgency assessments. "Worth noting" contains only what the caregiver themselves described as worrying.
 - The human approves: the transcript and the message are editable before sending.
 
-These rules came out of testing the prompt before the session: a simple test note ("I didn't check the meds; Ania will call the clinic tomorrow") showed that the useful output is a handover structure (observed / done / to take over / not checked), not a summary.
+These rules came out of testing the prompt before implementation: a simple test note ("I didn't check the meds; Ania will call the clinic tomorrow") showed that the useful output is a handover structure (observed / done / to take over / not checked), not a summary.
 
-## 7. Testing: Vitest + React Testing Library, limited scope in v1
+## 6. Testing: Vitest + React Testing Library, focused scope
 
 - **Vitest instead of Jest:** native to Vite (no separate Babel/TS transform config), with a Jest-compatible API. React Testing Library works identically with both, so the tests and patterns carry over directly to Jest-based projects.
 - **React Testing Library:** tests what the user sees and does (roles, accessible names, `userEvent`) rather than implementation details.
-- **Limited scope in v1:** in 2 h, testing competes with the end-to-end flow. v1 covers the logic most likely to break silently (parsing the LLM response, formatting the message, building `mailto:`) plus 1–2 component tests of the critical UI behavior. The fuller test suite (user-flow tests, MSW, accessibility checks, prompt evaluation, E2E) is planned for the next version — see `SPEC.md`.
-- Not tested in v1: `MediaRecorder` and real AI calls. These are browser and network boundaries, verified manually on a phone.
-
-## 8. Preparation before the clock started (for transparency)
-
-Done outside the 2 h limit:
-- problem selection and the decisions above,
-- GitHub repository, Vercel account linked to it, Groq API key,
-- the Groq browser test (`spikes/groq-browser-test.html`) and model selection,
-- three sample voice notes and their transcripts (`fixtures/`),
-- checking Claude Code session export.
-
-All application code was written during the session.
+- **Focused scope:** tests cover the logic most likely to break silently (parsing the LLM response, formatting the message, building `mailto:`) plus component tests of the critical UI behavior, rather than chasing coverage. The fuller test suite (user-flow tests, MSW, accessibility checks, prompt evaluation, E2E) is planned next — see `SPEC.md`.
+- Not tested automatically: `MediaRecorder` and real AI calls. These are browser and network boundaries, verified manually on a phone.
 
 ---
 
 ## Decisions during implementation
 <!-- Append here as you go: what, why, what was rejected. -->
 
-### 9. Tooling: the template's oxlint, npm 11 for installs
+### 7. Tooling: the template's oxlint, npm 11 for installs
 - `create-vite` 9 ships **oxlint** instead of ESLint in the `react-ts` template. Kept it: `npm run lint`
   works with no extra dependencies. The template's tsconfig had no `"strict": true`, so it was added.
 - npm 10.8.2 crashed while resolving peer dependencies (`Cannot read properties of null (reading
   'edgesOut')`, a known arborist bug). Dependencies were installed once with `npx npm@11`, with no global
   install. The lockfile is standard and builds on Vercel.
 
-### 10. Structuring call: strict JSON schema on `gpt-oss-120b`
+### 8. Structuring call: strict JSON schema on `gpt-oss-120b`
 - Checked in the Groq docs before writing the call, then confirmed with a real request:
   `response_format: json_schema` with `strict: true` works for `openai/gpt-oss-120b`. Strict mode
   requires every property in `required` and `additionalProperties: false`; `owner` is `["string", "null"]`.
@@ -109,12 +83,12 @@ All application code was written during the session.
 - The type guard (`src/ai/handover.ts`) validates the response anyway. If strict mode had been
   rejected, the fallback was `json_object`.
 
-### 11. Recording: file name from the recorder's actual MIME type
+### 9. Recording: file name from the recorder's actual MIME type
 - Chrome records WebM/Opus and Safari records MP4. Whisper detects the format from the file
   extension, so the name comes from `recorder.mimeType` after recording, not from the requested type.
 - `MediaRecorder.start()` is called without a timeslice, which yields a single, complete file.
 
-### 12. UX choices within the spec
+### 10. UX choices within the spec
 - **Parent label entered in the genitive** ("mamy", "taty") and used verbatim in "wizyta u …" and
   "Co u …". No declension logic, which could easily get Polish grammar wrong.
 - **Structuring starts on an explicit button** after the transcript has been read and corrected, so
@@ -129,7 +103,7 @@ All application code was written during the session.
 - **Web Share sends only the text.** The title is already the first line, and some apps would show
   `title` and `text` twice.
 
-### 13. Known prompt limitation (accepted for v1)
+### 11. Known prompt limitation (accepted for now)
 - With the third fixture ("czwartek o 10, a nie, przepraszam o 11"), the model put the visit time
   under "Nie sprawdzono" instead of using the corrected 11, despite a prompt rule about
   self-corrections. Negations, owners and the observed/reported split were correct for all three
