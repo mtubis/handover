@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { LOCALES, LOCALE_NAMES, isLocale, useT, type Locale } from '../i18n'
-import { DEFAULT_SETTINGS, type Settings } from '../lib/settings'
+import type { Settings } from '../lib/settings'
 
 interface Props {
   initial: Settings
@@ -21,7 +21,7 @@ export function SettingsForm({ initial, locale, onLocaleChange, onSave, onCancel
     event.preventDefault()
     onSave({
       apiKey: apiKey.trim(),
-      parentLabel: parentLabel.trim() || DEFAULT_SETTINGS.parentLabel,
+      parentLabel: parentLabel.trim(),
       recipients: recipients.trim(),
     })
   }
@@ -61,7 +61,7 @@ export function SettingsForm({ initial, locale, onLocaleChange, onSave, onCancel
       <input
         id="parent-label"
         type="text"
-        placeholder={t.settings.parentLabelPlaceholder}
+        placeholder={t.handover.defaultParentLabel}
         value={parentLabel}
         onChange={(event) => setParentLabel(event.target.value)}
       />

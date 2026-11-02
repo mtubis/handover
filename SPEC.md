@@ -9,9 +9,9 @@ When siblings take turns visiting an aging parent, information gets lost between
 An adult child (caregiver) returning from a visit to their parent. Uses a phone, has 1–2 minutes, does not want to install yet another app or create accounts. The recipients (siblings) already have their own communication channels (WhatsApp, SMS, email).
 
 ## Flow (the single end-to-end path)
-1. **Settings (one-time):** the user enters a Groq API key. Optionally a name/label for the parent (e.g. "mama").
+1. **Settings (one-time):** the UI language (detected from the browser, English as the fallback), a Groq API key. Optionally a label for the parent (e.g. "Mom"; empty → a default for the language).
 2. **Recording:** a large start/stop button with a visible recording timer.
-3. **Transcription:** audio → `whisper-large-v3-turbo` (`language=pl`). The text is shown so it can be read and corrected.
+3. **Transcription:** audio → `whisper-large-v3-turbo` (`language` = the UI language, ISO-639-1). The text is shown so it can be read and corrected.
 4. **Structuring:** transcript → `openai/gpt-oss-120b` → JSON (schema below).
 5. **Message preview:** a ready-made, editable text.
 6. **Sharing:** a "Share" button → Web Share API. Fallback when Web Share is unavailable: a `mailto:` link with pre-filled subject and body, plus "Copy to clipboard".
@@ -44,12 +44,12 @@ Prompt rules:
 - **Distinguish who said what.** "Mom said she slept badly" is `reported` (the parent's account); "she was limping" is `observed` (the caregiver's observation).
 - An `owner` is set only if the note names who will do it ("Ania will call the clinic").
 - No diagnoses, medical recommendations, or urgency assessments.
-- Output language: Polish. Tone: factual and warm, no dramatizing.
+- Output language: the UI language (English, Polish, German). Tone: factual and warm, no dramatizing.
 
 ## Message format (example)
-The message is user-facing, so its content is in Polish; the product name stays "Handover". Empty sections are omitted.
+The message is written in the UI language; headings, area labels and the date format come from the UI dictionaries, and the product name stays "Handover". Empty sections are omitted. Polish example:
 ```
-Handover · wizyta u mamy, 21.10
+Handover · wizyta u mamy, 21 października
 
 Co u mamy: ...
 
@@ -109,3 +109,4 @@ Goal: prove the critical logic and the most important UI behavior, not coverage.
 ## Test data
 - `fixtures/audio/` — 3 sample voice notes for manual testing (short; rambling with digressions; containing something worrying). Git-ignored.
 - `fixtures/transcripts/` — their transcripts, used for checking the prompt and as inputs for unit tests.
+- `fixtures/transcripts/` also holds English and German equivalents (`EN_*`, `DE_*`) of the Polish notes, with the same traps (negations, reported vs observed, no agreed owner, a self-correction).

@@ -128,3 +128,20 @@ These rules came out of testing the prompt before implementation: a simple test 
   immediately, without "Save" — on the first visit the settings form is the first screen, and it
   should be readable before it is filled in. Language names are shown in their own language.
 - The PWA manifest is shared by all languages, so it uses English.
+
+### 13. Note and message language follow the UI language
+- One language setting drives the UI, the Whisper `language` hint and the language of the generated
+  message. The common case is a family that talks and writes in one language; a separate "message
+  language" setting can be added later without changing the structure.
+- The Groq docs describe `language` as optional, in ISO-639-1 format, improving accuracy and
+  latency. The app's locale codes are ISO-639-1 codes, so they are passed as they are.
+- The prompt itself stays in English; only the output language is a parameter
+  (`buildSystemPrompt(language)`). Its rules (negations, reported vs observed, owners) are
+  language-independent, so the same prompt is reviewed once for all languages.
+- Headings, area labels and the title template of the message live in the UI dictionaries
+  (`handover` section), so each language controls its own grammar ("wizyta u mamy" with the Polish
+  genitive, "visit to Mom"). The parent label is still used verbatim; left empty, a default for the
+  current language is used, so switching the language does not leave a Polish "mamy" in an English
+  message.
+- The date is spelled out (`Intl.DateTimeFormat`, day + long month): "10/21" means different things
+  to American and British readers.

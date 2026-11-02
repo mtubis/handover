@@ -19,6 +19,7 @@ export default function App() {
   const [locale, setLocale] = useState<Locale>(loadLocale)
   const t = MESSAGES[locale]
   const [settings, setSettings] = useState<Settings>(loadSettings)
+  const parentLabel = settings.parentLabel || t.handover.defaultParentLabel
   const [editingSettings, setEditingSettings] = useState(() => settings.apiKey === '')
   const [storageWarning, setStorageWarning] = useState(false)
   const [step, setStep] = useState<Step>('record')
@@ -50,7 +51,7 @@ export default function App() {
     setError(null)
     setStep('transcribing')
     try {
-      setTranscript(await transcribe(recording.blob, recording.fileName, settings.apiKey))
+      setTranscript(await transcribe(recording.blob, recording.fileName, locale, settings.apiKey))
       setStep('transcript')
     } catch (cause) {
       showError(cause)
@@ -62,10 +63,10 @@ export default function App() {
     setError(null)
     setStep('structuring')
     try {
-      const handover = await structure(transcript, settings.parentLabel, settings.apiKey)
+      const handover = await structure(transcript, parentLabel, locale, settings.apiKey)
       const visitDate = new Date()
-      setSubject(formatTitle(settings.parentLabel, visitDate))
-      setMessage(formatMessage(handover, settings.parentLabel, visitDate))
+      setSubject(formatTitle(parentLabel, visitDate, locale))
+      setMessage(formatMessage(handover, parentLabel, visitDate, locale))
       setStep('message')
     } catch (cause) {
       showError(cause)
@@ -109,7 +110,7 @@ export default function App() {
           />
         ) : (
           <section className="card">
-            <h2>{t.app.noteHeading(settings.parentLabel)}</h2>
+            <h2>{t.app.noteHeading(parentLabel)}</h2>
 
             {error && (
               <p role="alert" className="error">

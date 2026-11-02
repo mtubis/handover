@@ -8,16 +8,17 @@ parent is doing, what was done, what the next person takes over and what was not
 share with a single tap.
 
 The UI is available in English and Polish (German in progress): it follows the browser's language,
-falls back to English, and can be changed in Settings. The generated message is still in Polish for
-now. Scope: [`SPEC.md`](SPEC.md). Rationale: [`DECISIONS.md`](DECISIONS.md).
+falls back to English, and can be changed in Settings. The note is transcribed and the message is
+written in the same language. Scope: [`SPEC.md`](SPEC.md). Rationale: [`DECISIONS.md`](DECISIONS.md).
 
 ## How it works
 
-1. **Settings (once):** a Groq API key, the parent label (e.g. "mamy") and optional e-mail recipients.
+1. **Settings (once):** the language, a Groq API key, how the family refers to the parent (e.g. "Mom";
+   left empty, a default for the language is used) and optional e-mail recipients.
 2. **Record** a voice note (or type it).
-3. **Transcribe** with `whisper-large-v3-turbo` (Polish); the transcript is editable.
+3. **Transcribe** with `whisper-large-v3-turbo` in the selected language; the transcript is editable.
 4. **Prepare the message:** `openai/gpt-oss-120b` returns JSON (strict schema), which is validated and
-   formatted into a Polish handover message; the message is editable.
+   formatted into a handover message in the selected language; the message is editable.
 5. **Share** via the Web Share API (WhatsApp, SMS, …) when available, or send it by e-mail (a `mailto:`
    link with the default recipients from settings), or copy it to the clipboard.
 
@@ -60,7 +61,7 @@ src/ai/          provider layer: config (model IDs), Groq calls, prompt + JSON s
 src/i18n/        UI strings per language, typed against one Messages interface; useT() hook
 src/lib/         pure functions: message formatting, mailto:, audio MIME helpers, error mapping, settings
 src/components/  settings form, recorder (+ MediaRecorder hook), message preview, share actions
-fixtures/        sample transcripts (audio is git-ignored)
+fixtures/        sample transcripts in PL/EN/DE (audio is git-ignored)
 spikes/          Groq browser test done before implementation, not part of the app
 ```
 
