@@ -8,7 +8,7 @@ export const de = {
     storageWarning:
       'Die Einstellungen konnten in diesem Browser nicht gespeichert werden – sie gelten nur, bis du die Seite schließt.',
     noteHeading: (parentLabel) => `Notiz nach dem Besuch bei ${parentLabel}`,
-    typeInstead: 'Ich schreibe die Notiz lieber',
+    typeInstead: 'Lieber tippen',
     transcribing: 'Die Aufnahme wird in Text umgewandelt…',
     structuring: 'Die Notiz wird geordnet…',
   },
@@ -22,7 +22,7 @@ export const de = {
     parentLabelHint: 'Z. B. „Mama“, „Papa“, „Oma“ – wie in „Besuch bei Mama“.',
     recipientsLabel: 'E-Mail-Adressen der Geschwister (optional)',
     recipientsPlaceholder: 'anna@example.com, markus@example.com',
-    recipientsHint: 'Werden als Empfänger eingesetzt, wenn du „Per E-Mail senden“ wählst.',
+    recipientsHint: 'Diese Adressen werden beim Senden per E-Mail als Empfänger übernommen.',
     save: 'Speichern',
     cancel: 'Abbrechen',
   },
