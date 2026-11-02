@@ -5,13 +5,14 @@ resuming work; update the checkboxes as steps are merged.
 
 ## Branch workflow
 
-- `main` stays **frozen** at its current state until the release is approved. No commits, no merges.
-- `release` is the integration branch for this plan.
+- `main` stays **frozen**: it is the original, working version and must remain available as it is
+  until the release is approved. No commits, no merges.
+- `release` is the integration branch for this plan, developed in the open next to `main`.
 - Each step below is developed on its own feature branch created from `release`
   (e.g. `docs/cleanup`, `feat/i18n-core`) and merged back into `release`.
 - When the release is approved, `release` is merged into `main` in one go.
-- Pushing `release` or feature branches is a deliberate decision: the repository is public and
-  Vercel creates preview deployments for non-`main` branches. Confirm before the first push.
+- Each step is tracked as a GitHub issue in the "1.0.0" milestone; the issue number is next to the
+  step heading.
 
 ## Product decisions for this release
 
@@ -29,7 +30,7 @@ resuming work; update the checkboxes as steps are merged.
 
 ## Steps
 
-### 0. Documentation cleanup — `docs/cleanup`
+### 0. Documentation cleanup — `docs/cleanup` (#1)
 - [ ] `CLAUDE.md`: remove the "Working context" section (time-boxed exercise, ~2 h limit); replace it
       with "deliver in small, verified steps". Update the "no persistent storage" constraint (see step 8)
       and the "UI in Polish" rule (UI is multilingual).
@@ -42,19 +43,19 @@ resuming work; update the checkboxes as steps are merged.
 - [ ] Check `spikes/` and remaining docs for time-limit / session wording.
 - [ ] Decide on untracked files (see open questions).
 
-### 1. i18n infrastructure, no behaviour change — `feat/i18n-core`
+### 1. i18n infrastructure, no behaviour change — `feat/i18n-core` (#2)
 - [ ] `src/i18n/{en,pl,de}.ts`; `en` is the reference, others typed with `satisfies` so a missing key
       fails the typecheck. React context + `useT()` hook.
 - [ ] Move all Polish UI strings to `pl.ts`. Replace Polish messages in `UserFacingError` /
       `describeError` with error codes translated at render time.
 - [ ] Existing tests still pass; the app looks exactly the same.
 
-### 2. Locale detection, language picker, English — `feat/i18n-locale`
+### 2. Locale detection, language picker, English — `feat/i18n-locale` (#3)
 - [ ] Pure `resolveLocale(languages, supported)` with unit tests.
 - [ ] Language selector in settings, persisted; `<html lang>` kept in sync.
 - [ ] `en.ts` translation; RTL tests for detection and switching.
 
-### 3. Note and message language — `feat/i18n-message`
+### 3. Note and message language — `feat/i18n-message` (#4)
 - [ ] Whisper language from settings instead of `AI_CONFIG.transcriptionLanguage: 'pl'`
       (verify accepted values in the Groq docs).
 - [ ] Prompt output language parameterised; bump `PROMPT_VERSION`.
@@ -64,26 +65,26 @@ resuming work; update the checkboxes as steps are merged.
 - [ ] EN and DE fixtures in `fixtures/transcripts/`; manual prompt check (negations,
       observed/reported, owners).
 
-### 4. German — `feat/i18n-de`
+### 4. German — `feat/i18n-de` (#5)
 - [ ] `de.ts` and German message formatting.
 
-### 5. Welcome screen — `feat/onboarding`
+### 5. Welcome screen — `feat/onboarding` (#6)
 - [ ] First-visit screen: what Handover is, three steps (record → review → share), "does not
       diagnose", button leading to settings. Flag in `localStorage`.
 - [ ] "How it works" link to reopen it.
 
-### 6. API key help and privacy — `feat/settings-help`
+### 6. API key help and privacy — `feat/settings-help` (#7)
 - [ ] "?" next to the API key field opens a native `<dialog>` (`showModal()`): how to create a Groq
       account and key, link to the console. **Verify the current console URL and free-tier terms in
       the Groq docs before writing the copy.**
 - [ ] "Privacy" section in settings with the accurate wording above and a link to Groq's policy.
 
-### 7. Resilience without persistence — `feat/retry`
+### 7. Resilience without persistence — `feat/retry` (#8)
 - [ ] Keep the recording in memory when transcription fails; offer "Try again"
       (today the recording is lost and the user is sent back to the record step).
 - [ ] `beforeunload` warning while recording or waiting for the AI.
 
-### 8. On-device draft — `feat/draft`
+### 8. On-device draft — `feat/draft` (#9)
 - [ ] Persist step, transcript, message and visit date in `localStorage`; audio blob in IndexedDB
       (no dependency).
 - [ ] After a reload during an API call, restore to "recording ready, try again".
@@ -92,7 +93,7 @@ resuming work; update the checkboxes as steps are merged.
 - [ ] Update `CLAUDE.md`, `SPEC.md`, `README.md` and the in-app privacy text accordingly;
       add a decision to `DECISIONS.md`.
 
-### 9. Release preparation — `docs/release`
+### 9. Release preparation — `docs/release` (#10)
 - [ ] README for a public audience: live link, screenshots/GIF, "what I'd do next".
 - [ ] License, version `1.0.0`, "not a medical device" disclaimer.
 - [ ] Manual test on Android and iOS in all three languages.
@@ -106,4 +107,3 @@ resuming work; update the checkboxes as steps are merged.
 - Demo mode without an API key (sample transcript and message from fixtures, no API calls) in this
   release?
 - License (MIT or none)?
-- GitHub issues for these steps: create them, and when (the repository is public)?
