@@ -8,6 +8,7 @@ export const PROMPT_VERSION = 2
 const OUTPUT_LANGUAGES: Record<Locale, string> = {
   en: 'English',
   pl: 'Polish',
+  de: 'German',
 }
 
 export function buildSystemPrompt(language: Locale): string {

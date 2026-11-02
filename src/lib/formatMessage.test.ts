@@ -23,6 +23,7 @@ describe('formatTitle', () => {
   it('uses the parent label verbatim and a spelled-out date in the message language', () => {
     expect(formatTitle('mamy', new Date(2026, 0, 5), 'pl')).toBe('Handover · wizyta u mamy, 5 stycznia')
     expect(formatTitle('Mom', new Date(2026, 0, 5), 'en')).toBe('Handover · visit to Mom, January 5')
+    expect(formatTitle('Mama', new Date(2026, 0, 5), 'de')).toBe('Handover · Besuch bei Mama, 5. Januar')
   })
 })
 
@@ -89,6 +90,33 @@ describe('formatMessage (English)', () => {
         'To take over:\n- [ ] Mark: ask whether Dad wants something to eat',
         'Not checked:\n- meds',
         'Worth keeping an eye on:\n- he has been eating little for a few days',
+      ].join('\n\n'),
+    )
+  })
+})
+
+describe('formatMessage (German)', () => {
+  it('uses German headings and labels', () => {
+    const message = formatMessage(
+      {
+        summary: 'Papa hat schlecht geschlafen.',
+        observations: [{ area: 'sleep', note: 'nachts mehrmals aufgewacht', source: 'reported' }],
+        done_during_visit: [],
+        tasks_for_next_visit: [{ task: 'Rezept abholen', owner: null }],
+        not_checked: ['Medikamente'],
+        flags: [],
+      },
+      'Papa',
+      visitDate,
+      'de',
+    )
+    expect(message).toBe(
+      [
+        'Handover · Besuch bei Papa, 21. Oktober',
+        'So geht es Papa: Papa hat schlecht geschlafen.',
+        'Mir ist aufgefallen:\n- Schlaf (laut Papa): nachts mehrmals aufgewacht',
+        'Zu übernehmen:\n- [ ] Rezept abholen',
+        'Nicht geprüft:\n- Medikamente',
       ].join('\n\n'),
     )
   })
