@@ -1,3 +1,4 @@
+import type { Area } from '../ai/handover'
 import type { AppErrorCode } from '../lib/errors'
 
 /**
@@ -20,7 +21,6 @@ export interface Messages {
     apiKeyHint: string
     languageLabel: string
     parentLabelLabel: string
-    parentLabelPlaceholder: string
     parentLabelHint: string
     recipientsLabel: string
     recipientsPlaceholder: string
@@ -51,6 +51,21 @@ export interface Messages {
     copied: string
     shareFailed: string
     copyFailed: string
+  }
+  /** The message for the siblings, written in the same language as the UI. */
+  handover: {
+    /** Used when the parent label in settings is left empty; also the field's placeholder. */
+    defaultParentLabel: string
+    title: (parentLabel: string, date: string) => string
+    summary: (parentLabel: string, summary: string) => string
+    observationsHeading: string
+    /** Marks the parent's own account, e.g. "Sleep (according to Mom): …". */
+    reportedBy: (parentLabel: string) => string
+    doneHeading: string
+    tasksHeading: string
+    notCheckedHeading: string
+    flagsHeading: string
+    areas: Record<Area, string>
   }
   errors: Record<AppErrorCode, string> & {
     invalidApiKey: string

@@ -17,7 +17,7 @@ Scope details: `SPEC.md`. Rationale behind decisions: `DECISIONS.md`. Read both 
 - Vite + React + TypeScript (strict), PWA, **no backend**.
 - AI calls made directly from the browser with plain `fetch` (no SDK), using an API key entered by the user (`localStorage`).
 - AI provider: Groq, OpenAI-compatible API at `https://api.groq.com/openai/v1/`. Browser access (CORS) verified with a standalone test page — see `spikes/groq-browser-test.html`.
-  - Transcription: `whisper-large-v3-turbo` (`POST audio/transcriptions`, multipart, `language=pl`).
+  - Transcription: `whisper-large-v3-turbo` (`POST audio/transcriptions`, multipart, `language` = the UI language as an ISO-639-1 code).
   - Structuring: `openai/gpt-oss-120b` (`POST chat/completions`).
   - Model IDs live in one config module, not scattered across the code.
 - Provider code sits behind a thin layer (`src/ai/`) so it can be swapped.

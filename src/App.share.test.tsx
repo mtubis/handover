@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
 import App from './App'
 import type { Handover } from './ai/handover'
+import { structure } from './ai/groq'
 import { saveLocale } from './i18n'
 import { saveSettings } from './lib/settings'
 
@@ -66,5 +67,24 @@ describe('sharing the handover message', () => {
     await user.click(screen.getByRole('button', { name: 'Kopiuj' }))
     expect(await screen.findByText('Skopiowano do schowka.')).toBeInTheDocument()
     expect(await navigator.clipboard.readText()).toContain('- [ ] odebrać receptę')
+  })
+})
+
+describe('message language', () => {
+  it('asks for and formats the message in the UI language, with its default parent label', async () => {
+    const user = userEvent.setup()
+    saveLocale('en')
+    saveSettings({ apiKey: 'test-key', parentLabel: '', recipients: '' })
+    render(<App />)
+
+    expect(screen.getByRole('heading', { name: 'Note after the visit to Mom' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: "I'd rather type the note" }))
+    await user.type(screen.getByLabelText(/Your note/), 'I did the shopping.')
+    await user.click(screen.getByRole('button', { name: 'Prepare the message' }))
+    const preview = await screen.findByLabelText(/Message for your siblings/)
+
+    expect(structure).toHaveBeenCalledWith('I did the shopping.', 'Mom', 'en', 'test-key')
+    expect((preview as HTMLTextAreaElement).value).toMatch(/^Handover · visit to Mom, /)
+    expect((preview as HTMLTextAreaElement).value).toContain('Not checked:\n- leki')
   })
 })

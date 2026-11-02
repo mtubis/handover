@@ -1,7 +1,8 @@
+import type { Locale } from '../i18n/locale'
 import { ApiError, AppError } from '../lib/errors'
 import { AI_CONFIG } from './config'
 import { parseHandover, type Handover } from './handover'
-import { HANDOVER_JSON_SCHEMA, STRUCTURING_SYSTEM_PROMPT, buildUserMessage } from './prompts'
+import { HANDOVER_JSON_SCHEMA, buildSystemPrompt, buildUserMessage } from './prompts'
 
 async function post(path: string, apiKey: string, body: BodyInit, headers: HeadersInit = {}) {
   const response = await fetch(`${AI_CONFIG.baseUrl}${path}`, {
@@ -16,11 +17,17 @@ async function post(path: string, apiKey: string, body: BodyInit, headers: Heade
   return (await response.json()) as unknown
 }
 
-export async function transcribe(audio: Blob, fileName: string, apiKey: string): Promise<string> {
+/** `language` is an ISO-639-1 code, which our locale codes are; it improves accuracy and latency. */
+export async function transcribe(
+  audio: Blob,
+  fileName: string,
+  language: Locale,
+  apiKey: string,
+): Promise<string> {
   const form = new FormData()
   form.append('file', audio, fileName)
   form.append('model', AI_CONFIG.transcriptionModel)
-  form.append('language', AI_CONFIG.transcriptionLanguage)
+  form.append('language', language)
   form.append('response_format', 'json')
 
   const data = await post('audio/transcriptions', apiKey, form)
@@ -37,12 +44,13 @@ interface ChatCompletion {
 export async function structure(
   transcript: string,
   parentLabel: string,
+  language: Locale,
   apiKey: string,
 ): Promise<Handover> {
   const body = JSON.stringify({
     model: AI_CONFIG.structuringModel,
     messages: [
-      { role: 'system', content: STRUCTURING_SYSTEM_PROMPT },
+      { role: 'system', content: buildSystemPrompt(language) },
       { role: 'user', content: buildUserMessage(transcript, parentLabel) },
     ],
     response_format: {

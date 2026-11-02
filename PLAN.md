@@ -60,14 +60,14 @@ resuming work; update the checkboxes as steps are merged.
 - [x] `en.ts` translation; RTL tests for detection, fallback and switching.
 
 ### 3. Note and message language — `feat/i18n-message` (#4)
-- [ ] Whisper language from settings instead of `AI_CONFIG.transcriptionLanguage: 'pl'`
-      (verify accepted values in the Groq docs).
-- [ ] Prompt output language parameterised; bump `PROMPT_VERSION`.
-- [ ] `formatMessage` localised: headings, "reported by" label, date via `Intl.DateTimeFormat`,
-      per-language title template ("wizyta u …" relies on the Polish genitive); per-language
-      default and hint for the parent label.
-- [ ] EN and DE fixtures in `fixtures/transcripts/`; manual prompt check (negations,
-      observed/reported, owners).
+- [x] Whisper language from the UI locale instead of `AI_CONFIG.transcriptionLanguage: 'pl'`
+      (Groq docs: optional, ISO-639-1; verified for Polish only so far).
+- [x] Prompt output language parameterised (`buildSystemPrompt(language)`); `PROMPT_VERSION` = 2.
+- [x] `formatMessage` localised: headings, "reported by" label, spelled-out date via
+      `Intl.DateTimeFormat`, per-language title template; empty parent label → per-language default.
+- [x] EN and DE fixtures in `fixtures/transcripts/`.
+- [ ] Manual check with a real key (by the user): paste each EN fixture as a typed note and check
+      negations, observed/reported and owners; record one English voice note. DE in step 4.
 
 ### 4. German — `feat/i18n-de` (#5)
 - [ ] `de.ts` and German message formatting.

@@ -1,6 +1,9 @@
 export interface Settings {
   apiKey: string
-  /** Parent label in the genitive case, used verbatim: "wizyta u {parentLabel}". */
+  /**
+   * How the family refers to the parent, used verbatim in the message (in Polish in the genitive:
+   * "wizyta u mamy"). Empty means the default for the UI language.
+   */
   parentLabel: string
   /** Optional default recipients for the mailto: fallback. */
   recipients: string
@@ -8,7 +11,7 @@ export interface Settings {
 
 const STORAGE_KEY = 'handover.settings'
 
-export const DEFAULT_SETTINGS: Settings = { apiKey: '', parentLabel: 'mamy', recipients: '' }
+export const DEFAULT_SETTINGS: Settings = { apiKey: '', parentLabel: '', recipients: '' }
 
 // Storage can be unavailable (private mode, blocked site data), so every access is guarded.
 export function loadSettings(): Settings {
@@ -20,10 +23,7 @@ export function loadSettings(): Settings {
     const { apiKey, parentLabel, recipients } = parsed as Record<string, unknown>
     return {
       apiKey: typeof apiKey === 'string' ? apiKey : '',
-      parentLabel:
-        typeof parentLabel === 'string' && parentLabel.trim() !== ''
-          ? parentLabel
-          : DEFAULT_SETTINGS.parentLabel,
+      parentLabel: typeof parentLabel === 'string' ? parentLabel.trim() : '',
       recipients: typeof recipients === 'string' ? recipients : '',
     }
   } catch {
