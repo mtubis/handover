@@ -74,7 +74,7 @@ resuming work; update the checkboxes as steps are merged.
       for locale detection and the prompt.
 - [ ] Manual check with a real key (by the user): DE fixtures as typed notes and one German
       voice note.
-- [ ] German wording reviewed by a native speaker (see open questions).
+- [x] German wording reviewed by the author (fluent, not native); two strings simplified.
 
 ### 5. Welcome screen — `feat/onboarding` (#6)
 - [ ] First-visit screen: what Handover is, three steps (record → review → share), "does not
@@ -109,7 +109,6 @@ resuming work; update the checkboxes as steps are merged.
 
 ## Open questions
 
-- Who reviews the German translation and sample message?
 - Demo mode without an API key (sample transcript and message from fixtures, no API calls) in this
   release?
 - License (MIT or none)?
