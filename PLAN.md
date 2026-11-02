@@ -1,0 +1,109 @@
+# PLAN — first public release of Handover
+
+Working plan for turning the current app into a version ready to publish. Read this first when
+resuming work; update the checkboxes as steps are merged.
+
+## Branch workflow
+
+- `main` stays **frozen** at its current state until the release is approved. No commits, no merges.
+- `release` is the integration branch for this plan.
+- Each step below is developed on its own feature branch created from `release`
+  (e.g. `docs/cleanup`, `feat/i18n-core`) and merged back into `release`.
+- When the release is approved, `release` is merged into `main` in one go.
+- Pushing `release` or feature branches is a deliberate decision: the repository is public and
+  Vercel creates preview deployments for non-`main` branches. Confirm before the first push.
+
+## Product decisions for this release
+
+- UI language: English, Polish and German. The initial language is resolved from the browser
+  (`navigator.languages`, matched by base language, e.g. `de-AT` → `de`), falling back to English.
+  A choice made in settings takes precedence and is persisted.
+- The language of the note (Whisper hint) and of the generated message follows the app language.
+  A separate "message language" setting is a possible later step.
+- i18n is implemented in-house (typed dictionaries + React context), no new dependency.
+- Privacy wording must stay accurate: the app has no server and stores nothing on our side, but the
+  audio and transcript are sent to Groq for processing, and the key lives in `localStorage`.
+  Never claim "no risk of data leaks".
+- A single draft (step, transcript, message, visit date, audio) may be kept **on the device only**,
+  with automatic expiry and an explicit "delete draft" action. This is not visit history.
+
+## Steps
+
+### 0. Documentation cleanup — `docs/cleanup`
+- [ ] `CLAUDE.md`: remove the "Working context" section (time-boxed exercise, ~2 h limit); replace it
+      with "deliver in small, verified steps". Update the "no persistent storage" constraint (see step 8)
+      and the "UI in Polish" rule (UI is multilingual).
+- [ ] `SPEC.md`: remove the time plan and the cut order; turn "v1 (within the 2 h limit)" into the
+      current testing scope and "Later" into a roadmap.
+- [ ] `DECISIONS.md`: remove section 2 ("Considered and rejected") and the problem-selection
+      comparison; keep the product rationale. Remove section 8 ("Preparation before the clock
+      started"). Rephrase rationales that relied on the time limit to state the real reason.
+- [ ] `README.md`: drop "The UI is in Polish" and "prototype" wording.
+- [ ] Check `spikes/` and remaining docs for time-limit / session wording.
+- [ ] Decide on untracked files (see open questions).
+
+### 1. i18n infrastructure, no behaviour change — `feat/i18n-core`
+- [ ] `src/i18n/{en,pl,de}.ts`; `en` is the reference, others typed with `satisfies` so a missing key
+      fails the typecheck. React context + `useT()` hook.
+- [ ] Move all Polish UI strings to `pl.ts`. Replace Polish messages in `UserFacingError` /
+      `describeError` with error codes translated at render time.
+- [ ] Existing tests still pass; the app looks exactly the same.
+
+### 2. Locale detection, language picker, English — `feat/i18n-locale`
+- [ ] Pure `resolveLocale(languages, supported)` with unit tests.
+- [ ] Language selector in settings, persisted; `<html lang>` kept in sync.
+- [ ] `en.ts` translation; RTL tests for detection and switching.
+
+### 3. Note and message language — `feat/i18n-message`
+- [ ] Whisper language from settings instead of `AI_CONFIG.transcriptionLanguage: 'pl'`
+      (verify accepted values in the Groq docs).
+- [ ] Prompt output language parameterised; bump `PROMPT_VERSION`.
+- [ ] `formatMessage` localised: headings, "reported by" label, date via `Intl.DateTimeFormat`,
+      per-language title template ("wizyta u …" relies on the Polish genitive); per-language
+      default and hint for the parent label.
+- [ ] EN and DE fixtures in `fixtures/transcripts/`; manual prompt check (negations,
+      observed/reported, owners).
+
+### 4. German — `feat/i18n-de`
+- [ ] `de.ts` and German message formatting.
+
+### 5. Welcome screen — `feat/onboarding`
+- [ ] First-visit screen: what Handover is, three steps (record → review → share), "does not
+      diagnose", button leading to settings. Flag in `localStorage`.
+- [ ] "How it works" link to reopen it.
+
+### 6. API key help and privacy — `feat/settings-help`
+- [ ] "?" next to the API key field opens a native `<dialog>` (`showModal()`): how to create a Groq
+      account and key, link to the console. **Verify the current console URL and free-tier terms in
+      the Groq docs before writing the copy.**
+- [ ] "Privacy" section in settings with the accurate wording above and a link to Groq's policy.
+
+### 7. Resilience without persistence — `feat/retry`
+- [ ] Keep the recording in memory when transcription fails; offer "Try again"
+      (today the recording is lost and the user is sent back to the record step).
+- [ ] `beforeunload` warning while recording or waiting for the AI.
+
+### 8. On-device draft — `feat/draft`
+- [ ] Persist step, transcript, message and visit date in `localStorage`; audio blob in IndexedDB
+      (no dependency).
+- [ ] After a reload during an API call, restore to "recording ready, try again".
+      A recording interrupted mid-capture is not recovered.
+- [ ] Delete the draft on "New note", via "Delete draft", and after a TTL (e.g. 24 h).
+- [ ] Update `CLAUDE.md`, `SPEC.md`, `README.md` and the in-app privacy text accordingly;
+      add a decision to `DECISIONS.md`.
+
+### 9. Release preparation — `docs/release`
+- [ ] README for a public audience: live link, screenshots/GIF, "what I'd do next".
+- [ ] License, version `1.0.0`, "not a medical device" disclaimer.
+- [ ] Manual test on Android and iOS in all three languages.
+- [ ] Decide whether this `PLAN.md` stays in the repo or is removed before merging into `main`.
+
+## Open questions
+
+- Untracked `ONBOARDING.md` (written in Polish) and the pasted session log in the repo root:
+  translate, delete or git-ignore?
+- Who reviews the German translation and sample message?
+- Demo mode without an API key (sample transcript and message from fixtures, no API calls) in this
+  release?
+- License (MIT or none)?
+- GitHub issues for these steps: create them, and when (the repository is public)?
