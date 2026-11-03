@@ -13,21 +13,34 @@ export const en = {
     structuring: 'Organizing the note…',
   },
   welcome: {
-    heading: 'What is Handover?',
-    intro:
-      "Handover helps siblings who share the care of an elderly parent. After a visit, record a short voice note and the app turns it into a clear message for the rest of the family: how the parent is doing, what was done, what the next person should take over and what wasn't checked.",
+    heading: 'Shared care. Clear communication.',
+    intro: [
+      'Handover helps family members, friends and caregivers keep each other informed about someone they care for together.',
+      'After a visit, record a short update. The app turns it into a clear message: how the person is doing, what was done, what needs to be taken over and what wasn’t checked. Share it with everyone involved in their care.',
+    ],
     stepsHeading: 'How it works',
     steps: [
-      'Record: in a minute or two, say how the visit went — or type it.',
-      'Review: the app organizes the note into a message. Read it and correct anything you like.',
-      'Share: send it to your siblings via WhatsApp, SMS or e-mail with one tap.',
+      {
+        title: 'Speak or type.',
+        text: 'Take a minute or two to describe the visit, or type your note.',
+      },
+      {
+        title: 'Review and edit.',
+        text: 'Check the transcript, then the prepared message. You can edit both.',
+      },
+      {
+        title: 'Share.',
+        text: 'Share the message through an available app, such as WhatsApp, SMS or email, or copy the text.',
+      },
     ],
-    noDiagnosis:
-      "Handover doesn't diagnose or assess anything — it only organizes your note. You always see the message before you send it.",
+    control:
+      'You decide what to share and who receives it. Handover organizes the information you provide — it doesn’t diagnose conditions or offer medical advice.',
+    requirementHeading: 'What do you need?',
     requirement:
-      "To start, you need your own Groq API key (Groq is the AI service that turns the recording into text and organizes the note). You'll enter it in Settings.",
+      'Your own Groq API key, which you enter in Settings. Groq is the AI service that transcribes your recording and organizes your note.',
+    privacyHeading: 'What happens to your data?',
     privacy:
-      'No account and no Handover server: your note goes from your device directly to Groq, only to be processed.',
+      'You don’t need a Handover account. Your recording and note text are sent directly to Groq for transcription and structuring. Handover does not store them on its own server.',
     start: 'Get started',
   },
   settings: {

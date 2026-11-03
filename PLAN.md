@@ -81,6 +81,8 @@ resuming work; update the checkboxes as steps are merged.
       diagnose", the Groq key requirement, a short privacy line and the language picker; button
       leading to settings. Flag in `localStorage`; skipped for users who already have a key.
 - [x] "How it works" link in the header to reopen it.
+- [x] Welcome copy rewritten by the author for a broader audience (family members, friends,
+      paid caregivers), with headings for the requirement and the privacy note.
 - [ ] Step 6: the welcome's key sentence ("You'll enter it in Settings") may mention the help
       dialog / free tier once those facts are verified.
 

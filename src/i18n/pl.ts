@@ -13,22 +13,35 @@ export const pl = {
     structuring: 'Porządkuję notatkę…',
   },
   welcome: {
-    heading: 'Czym jest Handover?',
-    intro:
-      'Handover pomaga rodzeństwu, które wspólnie opiekuje się starszym rodzicem. Po wizycie nagrywasz krótką notatkę głosową, a aplikacja zamienia ją w przejrzystą wiadomość dla reszty rodziny: jak czuje się rodzic, co zostało zrobione, co przejmuje następna osoba i czego nie sprawdzono.',
+    heading: 'Wspólna opieka, sprawny przepływ informacji',
+    intro: [
+      'Handover pomaga bliskim i opiekunom przekazywać sobie informacje o osobie, którą wspólnie się opiekują.',
+      'Po wizycie nagraj krótką relację. Aplikacja przygotuje przejrzystą wiadomość: jak czuje się osoba pod opieką, co zostało zrobione, co pozostaje do przejęcia i czego nie sprawdzono. Udostępnij ją rodzinie, bliskim lub innym opiekunom.',
+    ],
     stepsHeading: 'Jak to działa',
     steps: [
-      'Nagraj: w minutę lub dwie opowiedz, jak minęła wizyta — albo ją napisz.',
-      'Sprawdź: aplikacja porządkuje notatkę w wiadomość. Przeczytaj ją i popraw, co chcesz.',
-      'Wyślij: jednym dotknięciem przez WhatsApp, SMS albo e-mail.',
+      {
+        title: 'Opowiedz lub napisz.',
+        text: 'W minutę lub dwie opowiedz, jak minęła wizyta. Możesz też wpisać notatkę.',
+      },
+      {
+        title: 'Sprawdź i popraw.',
+        text: 'Przejrzyj transkrypcję, a potem przygotowaną wiadomość. Obie możesz edytować.',
+      },
+      {
+        title: 'Udostępnij.',
+        text: 'Przekaż wiadomość przez dostępną aplikację, np. WhatsApp, SMS lub e-mail, albo skopiuj jej treść.',
+      },
     ],
-    noDiagnosis:
-      'Handover niczego nie diagnozuje ani nie ocenia — tylko porządkuje Twoją notatkę. Zanim wyślesz wiadomość, zawsze ją widzisz.',
+    control:
+      'Ty decydujesz, co przekażesz i komu. Handover porządkuje podane informacje — nie stawia diagnoz ani nie udziela porad medycznych.',
+    requirementHeading: 'Czego potrzebujesz?',
     requirement:
-      'Na start potrzebujesz własnego klucza API Groq (Groq to usługa AI, która zamienia nagranie na tekst i porządkuje notatkę). Wpiszesz go w Ustawieniach.',
+      'Własnego klucza API Groq, który wpiszesz w ustawieniach. Groq to usługa AI zamieniająca nagranie na tekst i porządkująca notatkę.',
+    privacyHeading: 'Co dzieje się z Twoimi danymi?',
     privacy:
-      'Bez konta i bez serwera Handover: notatka trafia z Twojego urządzenia prosto do Groq, wyłącznie do przetworzenia.',
-    start: 'Zaczynamy',
+      'Nie musisz zakładać konta w Handover. Nagranie i tekst notatki są przesyłane bezpośrednio do Groq w celu transkrypcji i uporządkowania. Handover nie zapisuje ich na swoim serwerze.',
+    start: 'Zacznij',
   },
   settings: {
     heading: 'Ustawienia',
