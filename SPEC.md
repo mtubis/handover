@@ -6,11 +6,11 @@
 When siblings take turns visiting an aging parent, information gets lost between visits: who noticed that mom is eating less, who was supposed to buy the medication, whether anyone checked the pill organizer. The person coming back from a visit usually tells the same story several times, or not at all because they are tired. Typing a longer message in the car or on the way home is inconvenient; saying it out loud is easy.
 
 ## User
-An adult child (caregiver) returning from a visit to their parent. Uses a phone, has 1–2 minutes, does not want to install yet another app or create accounts. The recipients (siblings) already have their own communication channels (WhatsApp, SMS, email).
+A caregiver returning from a visit to the person they help care for: most often an adult child visiting an aging parent (the original case), but also a grandchild, a partner, a friend helping someone recover, or a paid caregiver. Uses a phone, has 1–2 minutes, does not want to install yet another app or create accounts. The recipients (siblings, other family members, other caregivers) already have their own communication channels (WhatsApp, SMS, email).
 
 ## Flow (the single end-to-end path)
 0. **Welcome (first visit):** what Handover is, the three steps (record → review → share), that it does not diagnose, that a Groq API key is needed, and the language picker. Reachable later via "How it works".
-1. **Settings (one-time):** the UI language (detected from the browser, English as the fallback), a Groq API key. Optionally a label for the parent (e.g. "Mom"; empty → a default for the language).
+1. **Settings (one-time):** the UI language (detected from the browser, English as the fallback), a Groq API key. Optionally a label for the person cared for (e.g. "Mom"; empty → a default for the language).
 2. **Recording:** a large start/stop button with a visible recording timer.
 3. **Transcription:** audio → `whisper-large-v3-turbo` (`language` = the UI language, ISO-639-1). The text is shown so it can be read and corrected.
 4. **Structuring:** transcript → `openai/gpt-oss-120b` → JSON (schema below).
@@ -18,11 +18,11 @@ An adult child (caregiver) returning from a visit to their parent. Uses a phone,
 6. **Sharing:** a "Share" button → Web Share API. Fallback when Web Share is unavailable: a `mailto:` link with pre-filled subject and body, plus "Copy to clipboard".
 
 ## LLM response schema
-A handover answers four questions: how is the parent, what was done, what does the next person take over, and what is still unknown.
+A handover answers four questions: how is the person cared for, what was done, what does the next person take over, and what is still unknown.
 
 ```json
 {
-  "summary": "2–3 sentences: how the parent is doing and what happened during the visit",
+  "summary": "2–3 sentences: how the person cared for is doing and what happened during the visit",
   "observations": [
     {
       "area": "health | sleep | mood | food | medication | home | other",
@@ -42,7 +42,7 @@ A handover answers four questions: how is the parent, what was done, what does t
 Prompt rules:
 - Only facts from the note. Missing information → an empty array, never invented content. No invented people or dates.
 - **Preserve negations.** "I didn't check the meds" goes to `not_checked`, never becomes "meds checked".
-- **Distinguish who said what.** "Mom said she slept badly" is `reported` (the parent's account); "she was limping" is `observed` (the caregiver's observation).
+- **Distinguish who said what.** "Mom said she slept badly" is `reported` (the cared-for person's own account); "she was limping" is `observed` (the caregiver's observation).
 - An `owner` is set only if the note names who will do it ("Ania will call the clinic").
 - No diagnoses, medical recommendations, or urgency assessments.
 - Output language: the UI language (English, Polish, German). Tone: factual and warm, no dramatizing.

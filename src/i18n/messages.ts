@@ -16,7 +16,7 @@ export interface Messages {
     settingsLink: string
     howItWorksLink: string
     storageWarning: string
-    noteHeading: (parentLabel: string) => string
+    noteHeading: (personLabel: string) => string
     typeInstead: string
     transcribing: string
     structuring: string
@@ -41,8 +41,8 @@ export interface Messages {
     apiKeyLabel: string
     apiKeyHint: string
     languageLabel: string
-    parentLabelLabel: string
-    parentLabelHint: string
+    personLabelLabel: string
+    personLabelHint: string
     recipientsLabel: string
     recipientsPlaceholder: string
     recipientsHint: string
@@ -73,15 +73,15 @@ export interface Messages {
     shareFailed: string
     copyFailed: string
   }
-  /** The message for the siblings, written in the same language as the UI. */
+  /** The message to share, written in the same language as the UI. */
   handover: {
-    /** Used when the parent label in settings is left empty; also the field's placeholder. */
-    defaultParentLabel: string
-    title: (parentLabel: string, date: string) => string
-    summary: (parentLabel: string, summary: string) => string
+    /** Used when the person label in settings is left empty; also the field's placeholder. */
+    defaultPersonLabel: string
+    title: (personLabel: string, date: string) => string
+    summary: (personLabel: string, summary: string) => string
     observationsHeading: string
-    /** Marks the parent's own account, e.g. "Sleep (according to Mom): …". */
-    reportedBy: (parentLabel: string) => string
+    /** Marks the cared-for person's own account, e.g. "Sleep (according to Mom): …". */
+    reportedBy: (personLabel: string) => string
     doneHeading: string
     tasksHeading: string
     notCheckedHeading: string
