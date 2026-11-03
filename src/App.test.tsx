@@ -16,9 +16,9 @@ describe('first visit', () => {
     const { unmount } = render(<App />)
 
     expect(screen.getByRole('heading', { name: 'Handover' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Czym jest Handover?' })).toBeInTheDocument()
-    expect(screen.getByText(/niczego nie diagnozuje/)).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Zaczynamy' }))
+    expect(screen.getByRole('heading', { name: 'Wspólna opieka, sprawny przepływ informacji' })).toBeInTheDocument()
+    expect(screen.getByText(/nie stawia diagnoz/)).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Zacznij' }))
 
     await user.type(screen.getByLabelText('Klucz API Groq'), 'test-key')
     await user.clear(screen.getByLabelText('Wizyta u…'))
@@ -28,7 +28,7 @@ describe('first visit', () => {
 
     unmount()
     render(<App />)
-    expect(screen.queryByRole('heading', { name: 'Czym jest Handover?' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Wspólna opieka, sprawny przepływ informacji' })).not.toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Notatka po wizycie u taty' })).toBeInTheDocument()
   })
 
@@ -46,7 +46,7 @@ describe('first visit', () => {
     saveSettings({ apiKey: 'test-key', parentLabel: '', recipients: '' })
     render(<App />)
 
-    expect(screen.queryByRole('heading', { name: 'What is Handover?' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Shared care. Clear communication.' })).not.toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Note after the visit to Mom' })).toBeInTheDocument()
   })
 
@@ -56,7 +56,7 @@ describe('first visit', () => {
     render(<App />)
 
     await user.click(screen.getByRole('button', { name: 'How it works' }))
-    expect(screen.getByRole('heading', { name: 'What is Handover?' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Shared care. Clear communication.' })).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Get started' }))
     expect(screen.getByRole('heading', { name: 'Note after the visit to Mom' })).toBeInTheDocument()
@@ -68,7 +68,7 @@ describe('UI language', () => {
     vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['pl-PL', 'en-US'])
     render(<App />)
 
-    expect(screen.getByRole('heading', { name: 'Czym jest Handover?' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Wspólna opieka, sprawny przepływ informacji' })).toBeInTheDocument()
     expect(document.documentElement.lang).toBe('pl')
   })
 
@@ -76,7 +76,7 @@ describe('UI language', () => {
     vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['fr-FR'])
     render(<App />)
 
-    expect(screen.getByRole('heading', { name: 'What is Handover?' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Shared care. Clear communication.' })).toBeInTheDocument()
     expect(document.documentElement.lang).toBe('en')
   })
 
@@ -84,7 +84,7 @@ describe('UI language', () => {
     vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['de-AT', 'en'])
     render(<App />)
 
-    expect(screen.getByRole('heading', { name: 'Was ist Handover?' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Gemeinsam betreuen. Gut informiert bleiben.' })).toBeInTheDocument()
     expect(screen.getByLabelText('Sprache')).toHaveDisplayValue('Deutsch')
     expect(document.documentElement.lang).toBe('de')
   })
@@ -95,7 +95,7 @@ describe('UI language', () => {
     render(<App />)
 
     await user.selectOptions(screen.getByLabelText('Language'), 'Deutsch')
-    expect(screen.getByRole('heading', { name: 'Was ist Handover?' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Gemeinsam betreuen. Gut informiert bleiben.' })).toBeInTheDocument()
   })
 
   it('switches immediately when chosen in settings and remembers the choice', async () => {

@@ -5,6 +5,11 @@ import type { AppErrorCode } from '../lib/errors'
  * Every UI string, per language. Strings with values are functions, so a translation can place
  * the value wherever its grammar needs it and the compiler checks the arguments.
  */
+export interface WelcomeStep {
+  title: string
+  text: string
+}
+
 export interface Messages {
   app: {
     tagline: string
@@ -19,11 +24,15 @@ export interface Messages {
   /** First-visit introduction, also reachable from the header. */
   welcome: {
     heading: string
-    intro: string
+    /** Paragraphs. */
+    intro: readonly string[]
     stepsHeading: string
-    steps: readonly [record: string, review: string, share: string]
-    noDiagnosis: string
+    steps: readonly [record: WelcomeStep, review: WelcomeStep, share: WelcomeStep]
+    /** The user stays in control; the app does not diagnose. */
+    control: string
+    requirementHeading: string
     requirement: string
+    privacyHeading: string
     privacy: string
     start: string
   }

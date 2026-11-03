@@ -14,22 +14,35 @@ export const de = {
     structuring: 'Die Notiz wird geordnet…',
   },
   welcome: {
-    heading: 'Was ist Handover?',
-    intro:
-      'Handover hilft Geschwistern, die sich gemeinsam um einen älteren Elternteil kümmern. Nach einem Besuch nimmst du eine kurze Sprachnotiz auf, und die App macht daraus eine übersichtliche Nachricht für den Rest der Familie: wie es dem Elternteil geht, was erledigt wurde, was die nächste Person übernimmt und was nicht geprüft wurde.',
+    heading: 'Gemeinsam betreuen. Gut informiert bleiben.',
+    intro: [
+      'Handover hilft Angehörigen, Freunden und Betreuungspersonen, Informationen über einen gemeinsam betreuten Menschen auszutauschen.',
+      'Nimm nach einem Besuch eine kurze Sprachnotiz auf. Die App erstellt daraus eine übersichtliche Nachricht: wie es der betreuten Person geht, was erledigt wurde, was noch übernommen werden muss und was nicht überprüft wurde. Teile sie mit allen, die an der Betreuung beteiligt sind.',
+    ],
     stepsHeading: 'So funktioniert’s',
     steps: [
-      'Aufnehmen: Erzähl in ein, zwei Minuten, wie der Besuch war – oder tipp es ein.',
-      'Prüfen: Die App ordnet die Notiz zu einer Nachricht. Lies sie durch und korrigiere, was du möchtest.',
-      'Teilen: Mit einem Tipp per WhatsApp, SMS oder E-Mail an deine Geschwister.',
+      {
+        title: 'Erzählen oder tippen.',
+        text: 'Erzähl in ein bis zwei Minuten, wie der Besuch war, oder gib deine Notiz als Text ein.',
+      },
+      {
+        title: 'Prüfen und bearbeiten.',
+        text: 'Lies zuerst die Transkription und anschließend die vorbereitete Nachricht durch. Du kannst beide bearbeiten.',
+      },
+      {
+        title: 'Teilen.',
+        text: 'Teile die Nachricht über eine verfügbare App, zum Beispiel per WhatsApp, SMS oder E-Mail, oder kopiere den Text.',
+      },
     ],
-    noDiagnosis:
-      'Handover stellt keine Diagnosen und bewertet nichts – die App ordnet nur deine Notiz. Du siehst die Nachricht immer, bevor du sie sendest.',
+    control:
+      'Du entscheidest, was du teilst und mit wem. Handover strukturiert deine Angaben – die App stellt keine Diagnosen und gibt keine medizinischen Ratschläge.',
+    requirementHeading: 'Was brauchst du?',
     requirement:
-      'Zum Start brauchst du einen eigenen Groq-API-Schlüssel (Groq ist der KI-Dienst, der die Aufnahme in Text umwandelt und die Notiz ordnet). Du trägst ihn in den Einstellungen ein.',
+      'Einen eigenen Groq-API-Schlüssel, den du in den Einstellungen eingibst. Groq ist der KI-Dienst, der deine Aufnahme in Text umwandelt und deine Notiz strukturiert.',
+    privacyHeading: 'Was passiert mit deinen Daten?',
     privacy:
-      'Kein Konto und kein Handover-Server: Deine Notiz geht direkt von deinem Gerät an Groq, nur zur Verarbeitung.',
-    start: 'Los geht’s',
+      'Du brauchst kein Handover-Konto. Deine Aufnahme und der Text deiner Notiz werden zur Transkription und Strukturierung direkt an Groq gesendet. Handover speichert sie nicht auf einem eigenen Server.',
+    start: 'Loslegen',
   },
   settings: {
     heading: 'Einstellungen',
