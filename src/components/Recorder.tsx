@@ -1,6 +1,7 @@
 import { useT } from '../i18n'
 import { formatDuration } from '../lib/audio'
 import { useRecorder, type Recording } from './useRecorder'
+import { useWarnBeforeUnload } from './useWarnBeforeUnload'
 
 interface Props {
   onRecorded: (recording: Recording) => void
@@ -10,6 +11,7 @@ interface Props {
 export function Recorder({ onRecorded, onError }: Props) {
   const t = useT()
   const { isRecording, elapsedSeconds, start, stop } = useRecorder()
+  useWarnBeforeUnload(isRecording)
 
   async function handleClick() {
     try {

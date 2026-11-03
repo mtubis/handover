@@ -85,6 +85,9 @@ export const pl = {
     stop: 'Zakończ nagrywanie',
     recording: (elapsed) => `Nagrywam… ${elapsed}`,
     prompt: 'Opowiedz, jak minęła wizyta.',
+    kept: 'Nagranie zostało zachowane — możesz spróbować ponownie.',
+    retry: 'Spróbuj ponownie',
+    discard: 'Nagraj nową notatkę',
   },
   transcript: {
     label: 'Twoja notatka (możesz poprawić)',

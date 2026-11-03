@@ -69,6 +69,10 @@ export interface Messages {
     stop: string
     recording: (elapsed: string) => string
     prompt: string
+    /** After a failed transcription: the recording is still there. */
+    kept: string
+    retry: string
+    discard: string
   }
   transcript: {
     label: string

@@ -106,9 +106,10 @@ resuming work; update the checkboxes as steps are merged.
       link to that page.
 
 ### 7. Resilience without persistence — `feat/retry` (#8)
-- [ ] Keep the recording in memory when transcription fails; offer "Try again"
-      (today the recording is lost and the user is sent back to the record step).
-- [ ] `beforeunload` warning while recording or waiting for the AI.
+- [x] Keep the recording in memory when transcription fails; offer "Try again" (same audio) or
+      "Record a new note". A failed structuring already kept the transcript.
+- [x] `beforeunload` warning while recording, waiting for the AI, or holding an untranscribed
+      recording. Mobile browsers often skip the prompt; step 8 is the real protection.
 
 ### 8. On-device draft — `feat/draft` (#9)
 - [ ] Persist step, transcript, message and visit date in `localStorage`; audio blob in IndexedDB

@@ -85,6 +85,9 @@ export const en = {
     stop: 'Stop recording',
     recording: (elapsed) => `Recording… ${elapsed}`,
     prompt: 'Say how the visit went.',
+    kept: 'Your recording is still here, so you can try again.',
+    retry: 'Try again',
+    discard: 'Record a new note',
   },
   transcript: {
     label: 'Your note (you can edit it)',
