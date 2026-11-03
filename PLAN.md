@@ -72,14 +72,17 @@ resuming work; update the checkboxes as steps are merged.
 ### 4. German — `feat/i18n-de` (#5)
 - [x] `de.ts` (informal "du", like the Polish UI) and German message formatting; `de` registered
       for locale detection and the prompt.
-- [ ] Manual check with a real key (by the user): DE fixtures as typed notes and one German
-      voice note.
+- [x] Manual check with a real key (by the user): DE fixtures as typed notes and one German
+      voice note. — as expected.
 - [x] German wording reviewed by the author (fluent, not native); two strings simplified.
 
 ### 5. Welcome screen — `feat/onboarding` (#6)
-- [ ] First-visit screen: what Handover is, three steps (record → review → share), "does not
-      diagnose", button leading to settings. Flag in `localStorage`.
-- [ ] "How it works" link to reopen it.
+- [x] First-visit screen: what Handover is, three steps (record → review → share), "does not
+      diagnose", the Groq key requirement, a short privacy line and the language picker; button
+      leading to settings. Flag in `localStorage`; skipped for users who already have a key.
+- [x] "How it works" link in the header to reopen it.
+- [ ] Step 6: the welcome's key sentence ("You'll enter it in Settings") may mention the help
+      dialog / free tier once those facts are verified.
 
 ### 6. API key help and privacy — `feat/settings-help` (#7)
 - [ ] "?" next to the API key field opens a native `<dialog>` (`showModal()`): how to create a Groq

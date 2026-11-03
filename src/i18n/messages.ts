@@ -9,11 +9,23 @@ export interface Messages {
   app: {
     tagline: string
     settingsLink: string
+    howItWorksLink: string
     storageWarning: string
     noteHeading: (parentLabel: string) => string
     typeInstead: string
     transcribing: string
     structuring: string
+  }
+  /** First-visit introduction, also reachable from the header. */
+  welcome: {
+    heading: string
+    intro: string
+    stepsHeading: string
+    steps: readonly [record: string, review: string, share: string]
+    noDiagnosis: string
+    requirement: string
+    privacy: string
+    start: string
   }
   settings: {
     heading: string

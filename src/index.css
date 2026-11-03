@@ -46,6 +46,26 @@ h2 {
   font-size: 1.2rem;
 }
 
+.header-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px 12px;
+}
+
+h3 {
+  margin: 20px 0 4px;
+  font-size: 1.05rem;
+}
+
+.welcome ol {
+  padding-left: 1.4em;
+}
+
+.welcome li + li {
+  margin-top: 6px;
+}
+
 .tagline {
   margin-top: 0;
   color: var(--muted);

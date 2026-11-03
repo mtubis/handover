@@ -13,6 +13,7 @@ written in the same language. Scope: [`SPEC.md`](SPEC.md). Rationale: [`DECISION
 
 ## How it works
 
+0. **Welcome (first visit):** what the app is for and how to use it; reopened via "How it works".
 1. **Settings (once):** the language, a Groq API key, how the family refers to the parent (e.g. "Mom";
    left empty, a default for the language is used) and optional e-mail recipients.
 2. **Record** a voice note (or type it).

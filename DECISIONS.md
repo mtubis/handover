@@ -147,3 +147,14 @@ These rules came out of testing the prompt before implementation: a simple test 
   message.
 - The date is spelled out (`Intl.DateTimeFormat`, day + long month): "10/21" means different things
   to American and British readers.
+
+### 14. Welcome screen on the first visit
+- Shown once, before the settings: a first-time visitor otherwise lands on a form asking for an API
+  key with no idea what the app does. A flag in `localStorage` remembers that it was seen; someone
+  who already has a key saved (an existing user) never gets it unasked. "How it works" in the
+  header reopens it.
+- The language picker is on the welcome screen too: a visitor whose browser language is not the
+  one they read should be able to switch before reading the rest.
+- The privacy line says only what holds for the whole app: no account, no Handover server, the note
+  goes straight to Groq to be processed. It does not claim that nothing is ever stored or that
+  there is "no risk": the key and (later) a draft live on the device, and Groq processes the note.

@@ -9,6 +9,7 @@ When siblings take turns visiting an aging parent, information gets lost between
 An adult child (caregiver) returning from a visit to their parent. Uses a phone, has 1–2 minutes, does not want to install yet another app or create accounts. The recipients (siblings) already have their own communication channels (WhatsApp, SMS, email).
 
 ## Flow (the single end-to-end path)
+0. **Welcome (first visit):** what Handover is, the three steps (record → review → share), that it does not diagnose, that a Groq API key is needed, and the language picker. Reachable later via "How it works".
 1. **Settings (one-time):** the UI language (detected from the browser, English as the fallback), a Groq API key. Optionally a label for the parent (e.g. "Mom"; empty → a default for the language).
 2. **Recording:** a large start/stop button with a visible recording timer.
 3. **Transcription:** audio → `whisper-large-v3-turbo` (`language` = the UI language, ISO-639-1). The text is shown so it can be read and corrected.

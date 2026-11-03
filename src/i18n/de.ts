@@ -5,12 +5,31 @@ export const de = {
   app: {
     tagline: 'Eine Sprachnotiz. Alle auf dem neuesten Stand.',
     settingsLink: 'Einstellungen',
+    howItWorksLink: 'So funktioniert’s',
     storageWarning:
       'Die Einstellungen konnten in diesem Browser nicht gespeichert werden – sie gelten nur, bis du die Seite schließt.',
     noteHeading: (parentLabel) => `Notiz nach dem Besuch bei ${parentLabel}`,
     typeInstead: 'Lieber tippen',
     transcribing: 'Die Aufnahme wird in Text umgewandelt…',
     structuring: 'Die Notiz wird geordnet…',
+  },
+  welcome: {
+    heading: 'Was ist Handover?',
+    intro:
+      'Handover hilft Geschwistern, die sich gemeinsam um einen älteren Elternteil kümmern. Nach einem Besuch nimmst du eine kurze Sprachnotiz auf, und die App macht daraus eine übersichtliche Nachricht für den Rest der Familie: wie es dem Elternteil geht, was erledigt wurde, was die nächste Person übernimmt und was nicht geprüft wurde.',
+    stepsHeading: 'So funktioniert’s',
+    steps: [
+      'Aufnehmen: Erzähl in ein, zwei Minuten, wie der Besuch war – oder tipp es ein.',
+      'Prüfen: Die App ordnet die Notiz zu einer Nachricht. Lies sie durch und korrigiere, was du möchtest.',
+      'Teilen: Mit einem Tipp per WhatsApp, SMS oder E-Mail an deine Geschwister.',
+    ],
+    noDiagnosis:
+      'Handover stellt keine Diagnosen und bewertet nichts – die App ordnet nur deine Notiz. Du siehst die Nachricht immer, bevor du sie sendest.',
+    requirement:
+      'Zum Start brauchst du einen eigenen Groq-API-Schlüssel (Groq ist der KI-Dienst, der die Aufnahme in Text umwandelt und die Notiz ordnet). Du trägst ihn in den Einstellungen ein.',
+    privacy:
+      'Kein Konto und kein Handover-Server: Deine Notiz geht direkt von deinem Gerät an Groq, nur zur Verarbeitung.',
+    start: 'Los geht’s',
   },
   settings: {
     heading: 'Einstellungen',

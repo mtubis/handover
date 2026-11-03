@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
-import { LOCALES, LOCALE_NAMES, isLocale, useT, type Locale } from '../i18n'
+import { useT, type Locale } from '../i18n'
 import type { Settings } from '../lib/settings'
+import { LanguageSelect } from './LanguageSelect'
 
 interface Props {
   initial: Settings
@@ -30,20 +31,7 @@ export function SettingsForm({ initial, locale, onLocaleChange, onSave, onCancel
     <form className="card" onSubmit={handleSubmit}>
       <h2>{t.settings.heading}</h2>
 
-      <label htmlFor="locale">{t.settings.languageLabel}</label>
-      <select
-        id="locale"
-        value={locale}
-        onChange={(event) => {
-          if (isLocale(event.target.value)) onLocaleChange(event.target.value)
-        }}
-      >
-        {LOCALES.map((option) => (
-          <option key={option} value={option} lang={option}>
-            {LOCALE_NAMES[option]}
-          </option>
-        ))}
-      </select>
+      <LanguageSelect locale={locale} onChange={onLocaleChange} />
 
       <label htmlFor="api-key">{t.settings.apiKeyLabel}</label>
       <input
