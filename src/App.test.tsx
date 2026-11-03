@@ -43,7 +43,7 @@ describe('first visit', () => {
   })
 
   it('is skipped for someone who already has a key', () => {
-    saveSettings({ apiKey: 'test-key', parentLabel: '', recipients: '' })
+    saveSettings({ apiKey: 'test-key', personLabel: '', recipients: '' })
     render(<App />)
 
     expect(screen.queryByRole('heading', { name: 'Shared care. Clear communication.' })).not.toBeInTheDocument()
@@ -52,7 +52,7 @@ describe('first visit', () => {
 
   it('can be reopened from the header', async () => {
     const user = userEvent.setup()
-    saveSettings({ apiKey: 'test-key', parentLabel: '', recipients: '' })
+    saveSettings({ apiKey: 'test-key', personLabel: '', recipients: '' })
     render(<App />)
 
     await user.click(screen.getByRole('button', { name: 'How it works' }))
@@ -101,7 +101,7 @@ describe('UI language', () => {
   it('switches immediately when chosen in settings and remembers the choice', async () => {
     const user = userEvent.setup()
     vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['en-US'])
-    saveSettings({ apiKey: 'test-key', parentLabel: '', recipients: '' })
+    saveSettings({ apiKey: 'test-key', personLabel: '', recipients: '' })
     const { unmount } = render(<App />)
 
     await user.click(screen.getByRole('button', { name: 'Settings' }))

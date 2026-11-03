@@ -2,7 +2,7 @@
 
 ## Handover — One voice note. Everyone up to date.
 
-Handover is a PWA for families sharing the care of an elderly parent. After a visit, the caregiver records a short voice note, and the app turns it into a structured message for their siblings (how the parent is doing, what was done, what the next person should take over) that can be shared with a single tap.
+Handover is a PWA for people who share someone's care: family members, friends, paid caregivers (the original and most common case: adult siblings caring for an aging parent). After a visit, the caregiver records a short voice note, and the app turns it into a structured message for the others involved (how the person is doing, what was done, what the next person should take over) that can be shared with a single tap. In code the cared-for person is the "person" (`personLabel`).
 
 Scope details: `SPEC.md`. Rationale behind decisions: `DECISIONS.md`. Read both before any significant change.
 

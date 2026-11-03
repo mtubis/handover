@@ -86,6 +86,16 @@ resuming work; update the checkboxes as steps are merged.
 - [ ] Step 6: the welcome's key sentence ("You'll enter it in Settings") may mention the help
       dialog / free tier once those facts are verified.
 
+### 5a. Broader audience — `feat/broader-audience` (#11)
+- [x] UI strings: "message to share", "default email recipients"; person label hint with a
+      non-family example.
+- [x] Prompt: "the person they help care for" / "others involved in the care"; `PROMPT_VERSION` 3.
+- [x] Rename `parentLabel` → `personLabel`, reading the old stored key.
+- [x] English: "email" instead of "e-mail".
+- [x] Docs: README (general audience + the original sibling story), CLAUDE.md, SPEC, DECISIONS.
+- [ ] Manual check with a real key (by the user): fixtures in all three languages after the
+      prompt change.
+
 ### 6. API key help and privacy — `feat/settings-help` (#7)
 - [ ] "?" next to the API key field opens a native `<dialog>` (`showModal()`): how to create a Groq
       account and key, link to the console. **Verify the current console URL and free-tier terms in

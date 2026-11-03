@@ -24,13 +24,13 @@ vi.mock('./ai/groq', () => ({
 async function prepareMessage() {
   const user = userEvent.setup()
   saveLocale('pl')
-  saveSettings({ apiKey: 'test-key', parentLabel: 'mamy', recipients: 'ania@example.com' })
+  saveSettings({ apiKey: 'test-key', personLabel: 'mamy', recipients: 'ania@example.com' })
   render(<App />)
 
   await user.click(screen.getByRole('button', { name: 'Wolę napisać notatkę' }))
   await user.type(screen.getByLabelText(/Twoja notatka/), 'Byłam u mamy, zrobiłam zakupy.')
   await user.click(screen.getByRole('button', { name: 'Przygotuj wiadomość' }))
-  const preview = await screen.findByLabelText(/Wiadomość dla rodzeństwa/)
+  const preview = await screen.findByLabelText(/Wiadomość do przekazania/)
   return { user, preview }
 }
 
@@ -74,14 +74,14 @@ describe('message language', () => {
   it('asks for and formats the message in the UI language, with its default parent label', async () => {
     const user = userEvent.setup()
     saveLocale('en')
-    saveSettings({ apiKey: 'test-key', parentLabel: '', recipients: '' })
+    saveSettings({ apiKey: 'test-key', personLabel: '', recipients: '' })
     render(<App />)
 
     expect(screen.getByRole('heading', { name: 'Note after the visit to Mom' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: "I'd rather type the note" }))
     await user.type(screen.getByLabelText(/Your note/), 'I did the shopping.')
     await user.click(screen.getByRole('button', { name: 'Prepare the message' }))
-    const preview = await screen.findByLabelText(/Message for your siblings/)
+    const preview = await screen.findByLabelText(/Message to share/)
 
     expect(structure).toHaveBeenCalledWith('I did the shopping.', 'Mom', 'en', 'test-key')
     expect((preview as HTMLTextAreaElement).value).toMatch(/^Handover · visit to Mom, /)

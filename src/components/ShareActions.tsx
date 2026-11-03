@@ -43,7 +43,7 @@ export function ShareActions({ subject, message, recipients }: Props) {
             {t.share.share}
           </button>
         )}
-        {/* Always offered: the share sheet doesn't know the siblings' default e-mail addresses. */}
+        {/* Always offered: the share sheet doesn't know the default e-mail recipients. */}
         <a
           className={canShare ? 'button' : 'button primary'}
           href={buildMailto(recipients, subject, message)}

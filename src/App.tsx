@@ -21,7 +21,7 @@ export default function App() {
   const [locale, setLocale] = useState<Locale>(loadLocale)
   const t = MESSAGES[locale]
   const [settings, setSettings] = useState<Settings>(loadSettings)
-  const parentLabel = settings.parentLabel || t.handover.defaultParentLabel
+  const personLabel = settings.personLabel || t.handover.defaultPersonLabel
   // Shown on the first visit only; someone who already has a key is not a first-time user.
   const [showWelcome, setShowWelcome] = useState(() => !hasSeenWelcome() && settings.apiKey === '')
   const [editingSettings, setEditingSettings] = useState(() => settings.apiKey === '')
@@ -72,10 +72,10 @@ export default function App() {
     setError(null)
     setStep('structuring')
     try {
-      const handover = await structure(transcript, parentLabel, locale, settings.apiKey)
+      const handover = await structure(transcript, personLabel, locale, settings.apiKey)
       const visitDate = new Date()
-      setSubject(formatTitle(parentLabel, visitDate, locale))
-      setMessage(formatMessage(handover, parentLabel, visitDate, locale))
+      setSubject(formatTitle(personLabel, visitDate, locale))
+      setMessage(formatMessage(handover, personLabel, visitDate, locale))
       setStep('message')
     } catch (cause) {
       showError(cause)
@@ -128,7 +128,7 @@ export default function App() {
           />
         ) : (
           <section className="card">
-            <h2>{t.app.noteHeading(parentLabel)}</h2>
+            <h2>{t.app.noteHeading(personLabel)}</h2>
 
             {error && (
               <p role="alert" className="error">

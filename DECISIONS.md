@@ -158,3 +158,14 @@ These rules came out of testing the prompt before implementation: a simple test 
 - The privacy line says only what holds for the whole app: no account, no Handover server, the note
   goes straight to Groq to be processed. It does not claim that nothing is ever stored or that
   there is "no risk": the key and (later) a draft live on the device, and Groq processes the note.
+
+### 15. Audience: anyone sharing someone's care, not only siblings
+- The app was designed around adult siblings caring for an aging parent, and that is still the
+  most common case. The same handover is useful to grandchildren, partners, friends helping someone
+  recover, or paid caregivers, so the UI, the welcome copy and the prompt no longer assume siblings
+  or a parent ("message to share", "default email recipients", "the person they help care for").
+- The prompt names the parent as the typical case but not the only one; its rules are unchanged
+  (`PROMPT_VERSION` 3).
+- In code the cared-for person is the "person": `parentLabel` became `personLabel`. Settings saved
+  under the old name are still read, so existing users keep their label.
+- Defaults stay with the common case ("mamy", "Mom", "Mama"); the hint adds a non-family example.

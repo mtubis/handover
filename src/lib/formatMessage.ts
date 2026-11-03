@@ -9,17 +9,17 @@ function formatDate(date: Date, locale: Locale): string {
 }
 
 /** Used both as the first line of the message and as the e-mail subject. */
-export function formatTitle(parentLabel: string, date: Date, locale: Locale): string {
-  return MESSAGES[locale].handover.title(parentLabel, formatDate(date, locale))
+export function formatTitle(personLabel: string, date: Date, locale: Locale): string {
+  return MESSAGES[locale].handover.title(personLabel, formatDate(date, locale))
 }
 
 function formatObservation(
   observation: Observation,
-  parentLabel: string,
+  personLabel: string,
   t: Messages['handover'],
 ): string {
   const area = t.areas[observation.area]
-  const source = observation.source === 'reported' ? ` (${t.reportedBy(parentLabel)})` : ''
+  const source = observation.source === 'reported' ? ` (${t.reportedBy(personLabel)})` : ''
   return `- ${area}${source}: ${observation.note}`
 }
 
@@ -35,18 +35,18 @@ const bullet = (item: string) => `- ${item}`
 
 export function formatMessage(
   handover: Handover,
-  parentLabel: string,
+  personLabel: string,
   date: Date,
   locale: Locale,
 ): string {
   const t = MESSAGES[locale].handover
   const summary = handover.summary.trim()
   const sections = [
-    formatTitle(parentLabel, date, locale),
-    summary ? t.summary(parentLabel, summary) : null,
+    formatTitle(personLabel, date, locale),
+    summary ? t.summary(personLabel, summary) : null,
     section(
       t.observationsHeading,
-      handover.observations.map((observation) => formatObservation(observation, parentLabel, t)),
+      handover.observations.map((observation) => formatObservation(observation, personLabel, t)),
     ),
     section(t.doneHeading, handover.done_during_visit.map(bullet)),
     section(t.tasksHeading, handover.tasks_for_next_visit.map(formatTask)),

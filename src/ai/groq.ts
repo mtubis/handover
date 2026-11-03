@@ -43,7 +43,7 @@ interface ChatCompletion {
 
 export async function structure(
   transcript: string,
-  parentLabel: string,
+  personLabel: string,
   language: Locale,
   apiKey: string,
 ): Promise<Handover> {
@@ -51,7 +51,7 @@ export async function structure(
     model: AI_CONFIG.structuringModel,
     messages: [
       { role: 'system', content: buildSystemPrompt(language) },
-      { role: 'user', content: buildUserMessage(transcript, parentLabel) },
+      { role: 'user', content: buildUserMessage(transcript, personLabel) },
     ],
     response_format: {
       type: 'json_schema',

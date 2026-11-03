@@ -15,14 +15,14 @@ interface Props {
 export function SettingsForm({ initial, locale, onLocaleChange, onSave, onCancel }: Props) {
   const t = useT()
   const [apiKey, setApiKey] = useState(initial.apiKey)
-  const [parentLabel, setParentLabel] = useState(initial.parentLabel)
+  const [personLabel, setPersonLabel] = useState(initial.personLabel)
   const [recipients, setRecipients] = useState(initial.recipients)
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault()
     onSave({
       apiKey: apiKey.trim(),
-      parentLabel: parentLabel.trim(),
+      personLabel: personLabel.trim(),
       recipients: recipients.trim(),
     })
   }
@@ -45,15 +45,15 @@ export function SettingsForm({ initial, locale, onLocaleChange, onSave, onCancel
       />
       <p className="hint">{t.settings.apiKeyHint}</p>
 
-      <label htmlFor="parent-label">{t.settings.parentLabelLabel}</label>
+      <label htmlFor="person-label">{t.settings.personLabelLabel}</label>
       <input
-        id="parent-label"
+        id="person-label"
         type="text"
-        placeholder={t.handover.defaultParentLabel}
-        value={parentLabel}
-        onChange={(event) => setParentLabel(event.target.value)}
+        placeholder={t.handover.defaultPersonLabel}
+        value={personLabel}
+        onChange={(event) => setPersonLabel(event.target.value)}
       />
-      <p className="hint">{t.settings.parentLabelHint}</p>
+      <p className="hint">{t.settings.personLabelHint}</p>
 
       <label htmlFor="recipients">{t.settings.recipientsLabel}</label>
       <input
