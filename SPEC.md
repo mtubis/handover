@@ -10,7 +10,7 @@ A caregiver returning from a visit to the person they help care for: most often 
 
 ## Flow (the single end-to-end path)
 0. **Welcome (first visit):** what Handover is, the three steps (record → review → share), that it does not diagnose, that a Groq API key is needed, and the language picker. Reachable later via "How it works".
-1. **Settings (one-time):** the UI language (detected from the browser, English as the fallback), a Groq API key. Optionally a label for the person cared for (e.g. "Mom"; empty → a default for the language).
+1. **Settings (one-time):** the UI language (detected from the browser, English as the fallback), a Groq API key ("?" opens a help dialog: how to create a key, the free plan and its limits, keeping the key safe; also reachable from the welcome screen). Optionally a label for the person cared for (e.g. "Mom"; empty → a default for the language).
 2. **Recording:** a large start/stop button with a visible recording timer.
 3. **Transcription:** audio → `whisper-large-v3-turbo` (`language` = the UI language, ISO-639-1). The text is shown so it can be read and corrected.
 4. **Structuring:** transcript → `openai/gpt-oss-120b` → JSON (schema below).
@@ -74,6 +74,7 @@ Warto zwrócić uwagę: ...
 ## Non-functional requirements
 - Works in mobile Chrome (Android) and Safari (iOS) over HTTPS.
 - No backend, no persistent storage of notes or transcripts.
+- A "Privacy" section in Settings states accurately where data goes (straight to Groq; Groq's retention and location; the key in this browser only) and links to Groq's data policy. No claims of "no risk".
 - Readable error messages: missing key, microphone permission denied, API error (401/429 explained in plain words), invalid JSON from the LLM.
 - Recording format depends on the browser (WebM/Opus in Chrome, MP4/AAC in Safari); both are sent to Whisper as-is, with a correct file extension.
 

@@ -30,7 +30,10 @@ written in the same language. Scope: [`SPEC.md`](SPEC.md). Rationale: [`DECISION
 
 - No backend, no database, no analytics. Notes, transcripts and messages exist only in the page's
   memory and disappear when it is closed.
-- The only network traffic with note content is the call to the Groq API.
+- The only network traffic with note content is the call to the Groq API. According to
+  [Groq's data policy](https://console.groq.com/docs/your-data), inference data is not retained by
+  default, but may be logged for up to 30 days to troubleshoot errors or investigate abuse; Groq
+  stores data in the USA. The in-app "Privacy" section in Settings says the same to users.
 - The API key is stored in `localStorage` on the device. This fits the bring-your-own-key model;
   a version with shared access would call the AI through a backend with a server-side key.
 - The app does not diagnose anything: the prompt forbids medical interpretation, recommendations,

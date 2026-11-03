@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { useT, type Locale } from '../i18n'
 import type { Settings } from '../lib/settings'
+import { KeyHelp } from './KeyHelp'
 import { LanguageSelect } from './LanguageSelect'
 
 interface Props {
@@ -33,7 +34,10 @@ export function SettingsForm({ initial, locale, onLocaleChange, onSave, onCancel
 
       <LanguageSelect locale={locale} onChange={onLocaleChange} />
 
-      <label htmlFor="api-key">{t.settings.apiKeyLabel}</label>
+      <div className="label-row">
+        <label htmlFor="api-key">{t.settings.apiKeyLabel}</label>
+        <KeyHelp trigger="icon" />
+      </div>
       <input
         id="api-key"
         type="password"

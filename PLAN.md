@@ -83,8 +83,7 @@ resuming work; update the checkboxes as steps are merged.
 - [x] "How it works" link in the header to reopen it.
 - [x] Welcome copy rewritten by the author for a broader audience (family members, friends,
       paid caregivers), with headings for the requirement and the privacy note.
-- [ ] Step 6: the welcome's key sentence ("You'll enter it in Settings") may mention the help
-      dialog / free tier once those facts are verified.
+- [x] Step 6: the welcome screen opens the key help ("How do I get a Groq API key?").
 
 ### 5a. Broader audience — `feat/broader-audience` (#11)
 - [x] UI strings: "message to share", "default email recipients"; person label hint with a
@@ -93,14 +92,18 @@ resuming work; update the checkboxes as steps are merged.
 - [x] Rename `parentLabel` → `personLabel`, reading the old stored key.
 - [x] English: "email" instead of "e-mail".
 - [x] Docs: README (general audience + the original sibling story), CLAUDE.md, SPEC, DECISIONS.
-- [ ] Manual check with a real key (by the user): fixtures in all three languages after the
-      prompt change.
+- [x] Manual check with a real key (by the user): fixtures in all three languages after the
+      prompt change. — as expected.
 
 ### 6. API key help and privacy — `feat/settings-help` (#7)
-- [ ] "?" next to the API key field opens a native `<dialog>` (`showModal()`): how to create a Groq
-      account and key, link to the console. **Verify the current console URL and free-tier terms in
-      the Groq docs before writing the copy.**
-- [ ] "Privacy" section in settings with the accurate wording above and a link to Groq's policy.
+- [x] "?" next to the API key field (and a link on the welcome screen) opens a native `<dialog>`
+      (`showModal()`): how to create a Groq account and key, link to the console, free plan limits,
+      keeping the key safe. Verified in the Groq docs on 2026-11-03: keys at
+      `console.groq.com/keys`; a Free tier exists with rate limits, a payment method is needed only
+      to upgrade (no claim about sign-up without a card).
+- [x] "Privacy" section in settings, with Groq's retention (none by default, logs up to 30 days,
+      opt-out in Data Controls) and storage location (USA) from "Your Data in GroqCloud", and a
+      link to that page.
 
 ### 7. Resilience without persistence — `feat/retry` (#8)
 - [ ] Keep the recording in memory when transcription fails; offer "Try again"

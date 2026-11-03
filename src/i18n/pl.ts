@@ -43,6 +43,30 @@ export const pl = {
       'Nie musisz zakładać konta w Handover. Nagranie i tekst notatki są przesyłane bezpośrednio do Groq w celu transkrypcji i uporządkowania. Handover nie zapisuje ich na swoim serwerze.',
     start: 'Zacznij',
   },
+  keyHelp: {
+    title: 'Jak uzyskać klucz Groq?',
+    intro: 'Klucz API działa jak hasło, dzięki któremu Handover może korzystać z Groq w Twoim imieniu.',
+    steps: [
+      'Otwórz konsolę Groq i zaloguj się albo załóż konto. Groq ma darmowy plan.',
+      'Utwórz nowy klucz API i nadaj mu nazwę, np. „Handover”.',
+      'Skopiuj klucz i wklej go w pole „Klucz API Groq” w ustawieniach.',
+    ],
+    consoleLink: 'Otwórz konsolę Groq',
+    cost: 'Darmowy plan ma limity użycia. Gdy je przekroczysz, aplikacja Ci o tym powie — wystarczy chwilę odczekać i spróbować ponownie. Metoda płatności jest potrzebna tylko przy wyborze płatnego planu.',
+    safety:
+      'Traktuj klucz jak hasło i nikomu go nie przekazuj. Jeśli wycieknie, usuń go w konsoli Groq i utwórz nowy.',
+    close: 'Zamknij',
+  },
+  privacy: {
+    heading: 'Prywatność',
+    points: [
+      'Handover nie ma kont ani własnego serwera. Nic z tego, co nagrasz lub wpiszesz, do nas nie trafia.',
+      'Nagranie i notatka trafiają z Twojego urządzenia prosto do Groq, wyłącznie do transkrypcji i uporządkowania. Groq domyślnie nie przechowuje tych danych; może zachować logi do 30 dni w celu diagnozy błędów lub wykrywania nadużyć. Groq przechowuje dane w USA.',
+      'Klucz API i ustawienia są zapisane tylko w tej przeglądarce na tym urządzeniu. Każdy, kto ma dostęp do tej przeglądarki, może je zobaczyć — zabezpiecz urządzenie jak zwykle.',
+      'Gotowa wiadomość trafia tylko tam, gdzie ją udostępnisz.',
+    ],
+    groqPolicyLink: 'Jak Groq postępuje z danymi (po angielsku)',
+  },
   settings: {
     heading: 'Ustawienia',
     apiKeyLabel: 'Klucz API Groq',

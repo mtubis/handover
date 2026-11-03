@@ -8,4 +8,7 @@ export const AI_CONFIG = {
   structuringReasoningEffort: 'low',
   structuringTemperature: 0.2,
   requestTimeoutMs: 90_000,
+  // Linked from the in-app help; both checked when the help was written.
+  consoleKeysUrl: 'https://console.groq.com/keys',
+  dataPolicyUrl: 'https://console.groq.com/docs/your-data',
 } as const
