@@ -44,6 +44,31 @@ export const de = {
       'Du brauchst kein Handover-Konto. Deine Aufnahme und der Text deiner Notiz werden zur Transkription und Strukturierung direkt an Groq gesendet. Handover speichert sie nicht auf einem eigenen Server.',
     start: 'Loslegen',
   },
+  keyHelp: {
+    title: 'Wie bekomme ich einen Groq-API-Schlüssel?',
+    intro:
+      'Ein API-Schlüssel funktioniert wie ein Passwort, mit dem Handover Groq in deinem Namen nutzen kann.',
+    steps: [
+      'Öffne die Groq-Konsole und melde dich an oder erstelle ein Konto. Groq bietet einen kostenlosen Plan.',
+      'Erstelle einen neuen API-Schlüssel und gib ihm einen Namen, z. B. „Handover“.',
+      'Kopiere den Schlüssel und füge ihn in den Einstellungen ins Feld „Groq-API-Schlüssel“ ein.',
+    ],
+    consoleLink: 'Groq-Konsole öffnen',
+    cost: 'Der kostenlose Plan hat Nutzungslimits. Wenn du sie erreichst, sagt dir die App Bescheid – warte dann einfach kurz und versuche es erneut. Eine Zahlungsmethode brauchst du nur für einen kostenpflichtigen Plan.',
+    safety:
+      'Behandle den Schlüssel wie ein Passwort und gib ihn nicht weiter. Falls er doch in falsche Hände gerät, lösch ihn in der Groq-Konsole und erstelle einen neuen.',
+    close: 'Schließen',
+  },
+  privacy: {
+    heading: 'Datenschutz',
+    points: [
+      'Handover hat keine Konten und keinen eigenen Server. Nichts, was du aufnimmst oder eintippst, landet bei uns.',
+      'Deine Aufnahme und deine Notiz gehen direkt von deinem Gerät an Groq, nur zur Transkription und Strukturierung. Standardmäßig speichert Groq diese Daten nicht; Logs können bis zu 30 Tage aufbewahrt werden, um Fehler zu beheben oder Missbrauch zu untersuchen. Groq speichert Daten in den USA.',
+      'Dein API-Schlüssel und deine Einstellungen liegen nur in diesem Browser auf diesem Gerät. Wer diesen Browser nutzen kann, kann sie sehen – schütze dein Gerät wie gewohnt.',
+      'Die fertige Nachricht geht nur dorthin, wo du sie teilst.',
+    ],
+    groqPolicyLink: 'So geht Groq mit deinen Daten um (auf Englisch)',
+  },
   settings: {
     heading: 'Einstellungen',
     apiKeyLabel: 'Groq-API-Schlüssel',

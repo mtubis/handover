@@ -169,3 +169,17 @@ These rules came out of testing the prompt before implementation: a simple test 
 - In code the cared-for person is the "person": `parentLabel` became `personLabel`. Settings saved
   under the old name are still read, so existing users keep their label.
 - Defaults stay with the common case ("mamy", "Mom", "Mama"); the hint adds a non-family example.
+
+### 16. API key help and the privacy section
+- The help is a native modal `<dialog>` (`showModal()`): focus handling, Escape to close and an
+  inert background come from the browser, with no dialog library. It is closed with a button
+  rather than `<form method="dialog">`, because it can sit inside the settings form, and nested
+  forms are invalid HTML. jsdom has no `showModal()`, so the test setup adds a minimal shim.
+- Every factual sentence was checked in the Groq docs before it was written (2026-11-03): where
+  keys are created, that a Free tier exists with rate limits, and that a payment method is only
+  needed to upgrade. The docs do not say that sign-up needs no card, so the app does not claim it.
+- The privacy section says what is true, not what sounds reassuring: no Handover server, the note
+  goes straight to Groq, Groq's own retention (none by default, logs for up to 30 days) and storage
+  location (USA), and that the key is readable by anyone using this browser. Groq's page is linked
+  (in English only) so users can check it themselves.
+- Provider URLs live in `AI_CONFIG`, next to the model IDs, so a provider swap touches one module.

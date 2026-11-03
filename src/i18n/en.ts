@@ -43,6 +43,30 @@ export const en = {
       'You don’t need a Handover account. Your recording and note text are sent directly to Groq for transcription and structuring. Handover does not store them on its own server.',
     start: 'Get started',
   },
+  keyHelp: {
+    title: 'How do I get a Groq API key?',
+    intro: 'An API key works like a password that lets Handover use Groq on your behalf.',
+    steps: [
+      'Open the Groq console and sign in or create an account. Groq has a free plan.',
+      'Create a new API key and give it a name, e.g. “Handover”.',
+      'Copy the key and paste it into the “Groq API key” field in Settings.',
+    ],
+    consoleLink: 'Open the Groq console',
+    cost: 'The free plan has usage limits. If you reach them, the app will tell you — just wait a moment and try again. A payment method is only needed if you choose a paid plan.',
+    safety:
+      'Treat the key like a password and don’t share it. If it ever leaks, delete it in the Groq console and create a new one.',
+    close: 'Close',
+  },
+  privacy: {
+    heading: 'Privacy',
+    points: [
+      'Handover has no accounts and no server of its own. Nothing you record or type reaches us.',
+      'Your recording and note go directly from your device to Groq, only to be transcribed and organized. By default, Groq does not retain this data; it may keep logs for up to 30 days to troubleshoot errors or investigate abuse. Groq stores data in the USA.',
+      'Your API key and settings are kept only in this browser on this device. Anyone who can use this browser can see them, so protect your device as usual.',
+      'The finished message goes only where you choose to share it.',
+    ],
+    groqPolicyLink: 'How Groq handles your data',
+  },
   settings: {
     heading: 'Settings',
     apiKeyLabel: 'Groq API key',

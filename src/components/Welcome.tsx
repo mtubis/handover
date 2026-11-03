@@ -1,4 +1,5 @@
 import { useT, type Locale } from '../i18n'
+import { KeyHelp } from './KeyHelp'
 import { LanguageSelect } from './LanguageSelect'
 
 interface Props {
@@ -28,6 +29,7 @@ export function Welcome({ locale, onLocaleChange, onStart }: Props) {
 
       <h3>{t.welcome.requirementHeading}</h3>
       <p>{t.welcome.requirement}</p>
+      <KeyHelp trigger="link" />
 
       <h3>{t.welcome.privacyHeading}</h3>
       <p>{t.welcome.privacy}</p>

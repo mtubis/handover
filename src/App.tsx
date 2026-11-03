@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { structure, transcribe } from './ai/groq'
 import { MessagePreview } from './components/MessagePreview'
+import { Privacy } from './components/Privacy'
 import { Recorder } from './components/Recorder'
 import { SettingsForm } from './components/SettingsForm'
 import { Welcome } from './components/Welcome'
@@ -119,13 +120,16 @@ export default function App() {
         {showWelcome ? (
           <Welcome locale={locale} onLocaleChange={handleLocaleChange} onStart={handleStart} />
         ) : editingSettings ? (
-          <SettingsForm
-            initial={settings}
-            locale={locale}
-            onLocaleChange={handleLocaleChange}
-            onSave={handleSave}
-            onCancel={settings.apiKey ? () => setEditingSettings(false) : undefined}
-          />
+          <>
+            <SettingsForm
+              initial={settings}
+              locale={locale}
+              onLocaleChange={handleLocaleChange}
+              onSave={handleSave}
+              onCancel={settings.apiKey ? () => setEditingSettings(false) : undefined}
+            />
+            <Privacy />
+          </>
         ) : (
           <section className="card">
             <h2>{t.app.noteHeading(personLabel)}</h2>

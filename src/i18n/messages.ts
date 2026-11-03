@@ -36,6 +36,21 @@ export interface Messages {
     privacy: string
     start: string
   }
+  /** How to get a Groq API key; opened from the welcome screen and next to the key field. */
+  keyHelp: {
+    title: string
+    intro: string
+    steps: readonly [openConsole: string, createKey: string, pasteKey: string]
+    consoleLink: string
+    cost: string
+    safety: string
+    close: string
+  }
+  privacy: {
+    heading: string
+    points: readonly string[]
+    groqPolicyLink: string
+  }
   settings: {
     heading: string
     apiKeyLabel: string

@@ -46,6 +46,41 @@ h2 {
   font-size: 1.2rem;
 }
 
+.label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 6px;
+}
+
+.label-row label {
+  margin: 0;
+}
+
+button.help-icon {
+  width: 36px;
+  min-height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+.dialog {
+  width: min(560px, calc(100% - 32px));
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  border: 0;
+  border-radius: 16px;
+  padding: 20px;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.dialog::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+.dialog ol,
 .header-links {
   display: flex;
   flex-wrap: wrap;
