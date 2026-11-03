@@ -4,12 +4,31 @@ export const en = {
   app: {
     tagline: 'One voice note. Everyone up to date.',
     settingsLink: 'Settings',
+    howItWorksLink: 'How it works',
     storageWarning:
       "Your settings couldn't be saved in this browser — they will work until you close the page.",
     noteHeading: (parentLabel) => `Note after the visit to ${parentLabel}`,
     typeInstead: "I'd rather type the note",
     transcribing: 'Turning the recording into text…',
     structuring: 'Organizing the note…',
+  },
+  welcome: {
+    heading: 'What is Handover?',
+    intro:
+      "Handover helps siblings who share the care of an elderly parent. After a visit, record a short voice note and the app turns it into a clear message for the rest of the family: how the parent is doing, what was done, what the next person should take over and what wasn't checked.",
+    stepsHeading: 'How it works',
+    steps: [
+      'Record: in a minute or two, say how the visit went — or type it.',
+      'Review: the app organizes the note into a message. Read it and correct anything you like.',
+      'Share: send it to your siblings via WhatsApp, SMS or e-mail with one tap.',
+    ],
+    noDiagnosis:
+      "Handover doesn't diagnose or assess anything — it only organizes your note. You always see the message before you send it.",
+    requirement:
+      "To start, you need your own Groq API key (Groq is the AI service that turns the recording into text and organizes the note). You'll enter it in Settings.",
+    privacy:
+      'No account and no Handover server: your note goes from your device directly to Groq, only to be processed.',
+    start: 'Get started',
   },
   settings: {
     heading: 'Settings',

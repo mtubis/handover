@@ -3,11 +3,13 @@ import { structure, transcribe } from './ai/groq'
 import { MessagePreview } from './components/MessagePreview'
 import { Recorder } from './components/Recorder'
 import { SettingsForm } from './components/SettingsForm'
+import { Welcome } from './components/Welcome'
 import { ShareActions } from './components/ShareActions'
 import type { Recording } from './components/useRecorder'
 import { I18nProvider, MESSAGES, loadLocale, saveLocale, type Locale } from './i18n'
 import { describeError } from './lib/errors'
 import { formatMessage, formatTitle } from './lib/formatMessage'
+import { hasSeenWelcome, markWelcomeSeen } from './lib/onboarding'
 import { loadSettings, saveSettings, type Settings } from './lib/settings'
 
 type Step = 'record' | 'transcribing' | 'transcript' | 'structuring' | 'message'
@@ -20,6 +22,8 @@ export default function App() {
   const t = MESSAGES[locale]
   const [settings, setSettings] = useState<Settings>(loadSettings)
   const parentLabel = settings.parentLabel || t.handover.defaultParentLabel
+  // Shown on the first visit only; someone who already has a key is not a first-time user.
+  const [showWelcome, setShowWelcome] = useState(() => !hasSeenWelcome() && settings.apiKey === '')
   const [editingSettings, setEditingSettings] = useState(() => settings.apiKey === '')
   const [storageWarning, setStorageWarning] = useState(false)
   const [step, setStep] = useState<Step>('record')
@@ -35,6 +39,11 @@ export default function App() {
   function handleLocaleChange(next: Locale) {
     setStorageWarning(!saveLocale(next))
     setLocale(next)
+  }
+
+  function handleStart() {
+    markWelcomeSeen()
+    setShowWelcome(false)
   }
 
   function handleSave(next: Settings) {
@@ -86,10 +95,17 @@ export default function App() {
       <main className="app">
         <header className="app-header">
           <h1>Handover</h1>
-          {!editingSettings && (
-            <button type="button" className="link" onClick={() => setEditingSettings(true)}>
-              {t.app.settingsLink}
-            </button>
+          {!showWelcome && (
+            <nav className="header-links">
+              <button type="button" className="link" onClick={() => setShowWelcome(true)}>
+                {t.app.howItWorksLink}
+              </button>
+              {!editingSettings && (
+                <button type="button" className="link" onClick={() => setEditingSettings(true)}>
+                  {t.app.settingsLink}
+                </button>
+              )}
+            </nav>
           )}
         </header>
         <p className="tagline">{t.app.tagline}</p>
@@ -100,7 +116,9 @@ export default function App() {
           </p>
         )}
 
-        {editingSettings ? (
+        {showWelcome ? (
+          <Welcome locale={locale} onLocaleChange={handleLocaleChange} onStart={handleStart} />
+        ) : editingSettings ? (
           <SettingsForm
             initial={settings}
             locale={locale}
