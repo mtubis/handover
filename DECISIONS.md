@@ -183,3 +183,17 @@ These rules came out of testing the prompt before implementation: a simple test 
   location (USA), and that the key is readable by anyone using this browser. Groq's page is linked
   (in English only) so users can check it themselves.
 - Provider URLs live in `AI_CONFIG`, next to the model IDs, so a provider swap touches one module.
+
+### 17. Recovering from a failed transcription
+- The most common failures (rate limit, network, timeout) are temporary, and before this change
+  each one cost the recording: the app went back to the record step. Now the recording is kept in
+  memory and "Try again" sends the same audio; "Record a new note" discards it. A failed
+  structuring already returned to the editable transcript, so it needed no change.
+- A `beforeunload` warning covers the moments when a reload would lose work that cannot be
+  rebuilt: while recording, while waiting for the AI, and while a recording is not transcribed
+  yet. It is deliberately not active on the transcript and message screens, where it would fire
+  after almost every use; those are covered by the on-device draft (step 8 of `PLAN.md`).
+- Browsers show their own text in that prompt and mobile browsers often skip it, so it is a
+  safety net on desktop rather than a guarantee.
+- In the component test the recorder is replaced by a button that returns a blob: `MediaRecorder`
+  is a browser boundary and is mocked there rather than emulated.

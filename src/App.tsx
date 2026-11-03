@@ -7,13 +7,14 @@ import { SettingsForm } from './components/SettingsForm'
 import { Welcome } from './components/Welcome'
 import { ShareActions } from './components/ShareActions'
 import type { Recording } from './components/useRecorder'
+import { useWarnBeforeUnload } from './components/useWarnBeforeUnload'
 import { I18nProvider, MESSAGES, loadLocale, saveLocale, type Locale } from './i18n'
 import { describeError } from './lib/errors'
 import { formatMessage, formatTitle } from './lib/formatMessage'
 import { hasSeenWelcome, markWelcomeSeen } from './lib/onboarding'
 import { loadSettings, saveSettings, type Settings } from './lib/settings'
 
-type Step = 'record' | 'transcribing' | 'transcript' | 'structuring' | 'message'
+type Step = 'record' | 'transcribing' | 'transcribeFailed' | 'transcript' | 'structuring' | 'message'
 
 // Kept as the cause, not as text, so the message follows the current UI language.
 type ErrorState = { cause: unknown } | null
@@ -32,6 +33,12 @@ export default function App() {
   const [message, setMessage] = useState('')
   const [subject, setSubject] = useState('')
   const [error, setError] = useState<ErrorState>(null)
+  // Kept after a failed transcription, so a network hiccup or a rate limit doesn't cost the note.
+  const [pendingRecording, setPendingRecording] = useState<Recording | null>(null)
+
+  useWarnBeforeUnload(
+    step === 'transcribing' || step === 'transcribeFailed' || step === 'structuring',
+  )
 
   useEffect(() => {
     document.documentElement.lang = locale
@@ -57,16 +64,24 @@ export default function App() {
     setError({ cause })
   }
 
-  async function handleRecorded(recording: Recording) {
+  async function transcribeRecording(recording: Recording) {
     setError(null)
     setStep('transcribing')
     try {
       setTranscript(await transcribe(recording.blob, recording.fileName, locale, settings.apiKey))
+      setPendingRecording(null)
       setStep('transcript')
     } catch (cause) {
       showError(cause)
-      setStep('record')
+      setPendingRecording(recording)
+      setStep('transcribeFailed')
     }
+  }
+
+  function discardRecording() {
+    setError(null)
+    setPendingRecording(null)
+    setStep('record')
   }
 
   async function handlePrepareMessage() {
@@ -86,6 +101,7 @@ export default function App() {
 
   function startOver() {
     setError(null)
+    setPendingRecording(null)
     setTranscript('')
     setMessage('')
     setStep('record')
@@ -142,7 +158,7 @@ export default function App() {
 
             {step === 'record' && (
               <>
-                <Recorder onRecorded={handleRecorded} onError={showError} />
+                <Recorder onRecorded={transcribeRecording} onError={showError} />
                 <button type="button" className="link" onClick={() => setStep('transcript')}>
                   {t.app.typeInstead}
                 </button>
@@ -150,6 +166,24 @@ export default function App() {
             )}
 
             {step === 'transcribing' && <p aria-live="polite">{t.app.transcribing}</p>}
+
+            {step === 'transcribeFailed' && pendingRecording && (
+              <>
+                <p>{t.recorder.kept}</p>
+                <div className="actions">
+                  <button
+                    type="button"
+                    className="primary"
+                    onClick={() => transcribeRecording(pendingRecording)}
+                  >
+                    {t.recorder.retry}
+                  </button>
+                  <button type="button" onClick={discardRecording}>
+                    {t.recorder.discard}
+                  </button>
+                </div>
+              </>
+            )}
 
             {step === 'transcript' && (
               <>

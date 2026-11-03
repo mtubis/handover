@@ -88,6 +88,9 @@ export const de = {
     stop: 'Aufnahme beenden',
     recording: (elapsed) => `Aufnahme läuft… ${elapsed}`,
     prompt: 'Erzähl, wie der Besuch war.',
+    kept: 'Deine Aufnahme ist noch da – du kannst es erneut versuchen.',
+    retry: 'Erneut versuchen',
+    discard: 'Neue Notiz aufnehmen',
   },
   transcript: {
     label: 'Deine Notiz (du kannst sie bearbeiten)',
