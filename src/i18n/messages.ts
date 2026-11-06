@@ -34,6 +34,8 @@ export interface Messages {
     requirement: string
     privacyHeading: string
     privacy: string
+    /** Not a medical device; where to turn when something is worrying. */
+    disclaimer: string
     start: string
   }
   /** How to get a Groq API key; opened from the welcome screen and next to the key field. */

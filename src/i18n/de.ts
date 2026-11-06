@@ -42,6 +42,8 @@ export const de = {
     privacyHeading: 'Was passiert mit deinen Daten?',
     privacy:
       'Du brauchst kein Handover-Konto. Deine Aufnahme und der Text deiner Notiz werden zur Transkription und Strukturierung direkt an Groq gesendet. Handover speichert sie nicht auf einem eigenen Server.',
+    disclaimer:
+      'Handover ist kein Medizinprodukt und beurteilt keinen Gesundheitszustand. Wenn dich etwas beunruhigt, wende dich an eine Ärztin oder einen Arzt; im Notfall ruf den Notruf an.',
     start: 'Loslegen',
   },
   keyHelp: {

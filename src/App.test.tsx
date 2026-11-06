@@ -18,6 +18,7 @@ describe('first visit', () => {
     expect(screen.getByRole('heading', { name: 'Handover' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Wspólna opieka, sprawny przepływ informacji' })).toBeInTheDocument()
     expect(screen.getByText(/nie stawia diagnoz/)).toBeInTheDocument()
+    expect(screen.getByText(/nie jest wyrobem medycznym/)).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Zacznij' }))
 
     await user.type(screen.getByLabelText('Klucz API Groq'), 'test-key')

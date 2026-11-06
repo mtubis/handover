@@ -33,6 +33,7 @@ export function Welcome({ locale, onLocaleChange, onStart }: Props) {
 
       <h3>{t.welcome.privacyHeading}</h3>
       <p>{t.welcome.privacy}</p>
+      <p>{t.welcome.disclaimer}</p>
 
       {/* Offered here too: a first visitor may land in a language they don't read. */}
       <LanguageSelect locale={locale} onChange={onLocaleChange} />
