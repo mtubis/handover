@@ -9,7 +9,7 @@ Scope details: `SPEC.md`. Rationale behind decisions: `DECISIONS.md`. Read both 
 ## Working context
 - Deliver in small, verified steps: one working slice → verification → commit. Keep the end-to-end flow working on a phone after every step.
 - If something turns out much bigger than expected, stop and ask instead of expanding the scope.
-- Current work: the first public release, planned step by step in `PLAN.md` (one GitHub issue per step). Read it when resuming work.
+- Current work: the first public release (1.0.0). Its steps were tracked as GitHub issues (milestone "1.0.0"); check the open issues when resuming work.
 - Branches: `main` is the original version and stays frozen until the release is approved. Each step is a feature branch from `release`, merged back into `release`; `release` is merged into `main` at the end.
 - The repository is public and may serve as a code sample. Keep code, commits, and docs clean and readable.
 

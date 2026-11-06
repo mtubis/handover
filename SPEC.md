@@ -95,6 +95,7 @@ Goal: prove the critical logic and the most important UI behavior, not coverage.
 - Not tested automatically: `MediaRecorder`, real AI calls, cross-browser behavior (verified manually on a phone).
 
 ### Next
+- A demo mode (sample note and message, no API key, no API calls).
 - Full user-flow tests with the AI layer mocked (record → transcript → message → share), including error states.
 - Mock Service Worker (MSW) for the HTTP layer instead of module mocks.
 - Accessibility checks (e.g. `vitest-axe`).

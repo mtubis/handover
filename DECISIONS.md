@@ -217,3 +217,14 @@ These rules came out of testing the prompt before implementation: a simple test 
   swallows errors, so without IndexedDB (some private modes, jsdom) the app works as before and
   only the recording is not restored. In component tests the module is mocked at that boundary.
 
+### 19. First public release (1.0.0)
+- MIT license: the repository serves as a code sample, and without a license nobody may legally
+  reuse any of it.
+- A demo mode without an API key was considered and postponed: it would help visitors who only
+  want to see the result, but it is a separate flow to build and test. Screenshots in the README
+  cover that for now; the demo is the first item under "What I'd do next".
+- A "not a medical device" note is shown on the welcome screen and in the README, in line with
+  decision 5: the app organizes what the caregiver said and does not assess health.
+- The step plan used to prepare the release (`PLAN.md`) was removed once it was done; the steps
+  remain as closed GitHub issues and as merge commits on `release`.
+
