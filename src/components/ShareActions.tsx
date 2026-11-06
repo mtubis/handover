@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useT } from '../i18n'
 import { buildMailto } from '../lib/mailto'
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export function ShareActions({ subject, message, recipients }: Props) {
+  const t = useT()
   const [status, setStatus] = useState<string | null>(null)
   const canShare = typeof navigator.share === 'function'
 
@@ -19,7 +21,7 @@ export function ShareActions({ subject, message, recipients }: Props) {
     } catch (error) {
       // AbortError means the user closed the share sheet — not an error worth showing.
       if (!(error instanceof DOMException && error.name === 'AbortError')) {
-        setStatus('Nie udało się udostępnić. Skopiuj wiadomość i wklej ją ręcznie.')
+        setStatus(t.share.shareFailed)
       }
     }
   }
@@ -27,9 +29,9 @@ export function ShareActions({ subject, message, recipients }: Props) {
   async function handleCopy() {
     try {
       await navigator.clipboard.writeText(message)
-      setStatus('Skopiowano do schowka.')
+      setStatus(t.share.copied)
     } catch {
-      setStatus('Nie udało się skopiować. Zaznacz tekst i skopiuj go ręcznie.')
+      setStatus(t.share.copyFailed)
     }
   }
 
@@ -38,18 +40,18 @@ export function ShareActions({ subject, message, recipients }: Props) {
       <div className="actions">
         {canShare && (
           <button type="button" className="primary" onClick={handleShare}>
-            Udostępnij
+            {t.share.share}
           </button>
         )}
-        {/* Always offered: the share sheet doesn't know the siblings' default e-mail addresses. */}
+        {/* Always offered: the share sheet doesn't know the default e-mail recipients. */}
         <a
           className={canShare ? 'button' : 'button primary'}
           href={buildMailto(recipients, subject, message)}
         >
-          Wyślij e-mailem
+          {t.share.email}
         </a>
         <button type="button" onClick={handleCopy}>
-          Kopiuj
+          {t.share.copy}
         </button>
       </div>
       <p className="hint" aria-live="polite">

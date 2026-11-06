@@ -1,3 +1,9 @@
+/** A finished voice note, ready to be sent for transcription. */
+export interface Recording {
+  blob: Blob
+  fileName: string
+}
+
 // Chrome records WebM/Opus, Safari records MP4/AAC. Whisper accepts both as-is,
 // but it detects the format from the file extension, so the name must match the content.
 const PREFERRED_MIME_TYPES = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/webm']

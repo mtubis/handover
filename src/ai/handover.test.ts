@@ -1,4 +1,4 @@
-import { UserFacingError } from '../lib/errors'
+import { AppError } from '../lib/errors'
 import { parseHandover, type Handover } from './handover'
 
 const valid: Handover = {
@@ -22,12 +22,12 @@ describe('parseHandover', () => {
   })
 
   it('rejects invalid JSON with a readable error', () => {
-    expect(() => parseHandover('{"summary": ')).toThrow(UserFacingError)
+    expect(() => parseHandover('{"summary": ')).toThrow(AppError)
   })
 
   it('rejects a response with a missing field', () => {
     const { not_checked: _, ...withoutNotChecked } = valid
-    expect(() => parseHandover(JSON.stringify(withoutNotChecked))).toThrow(UserFacingError)
+    expect(() => parseHandover(JSON.stringify(withoutNotChecked))).toThrow(AppError)
   })
 
   it('rejects an unknown observation source', () => {
@@ -35,15 +35,15 @@ describe('parseHandover', () => {
       ...valid,
       observations: [{ area: 'sleep', note: 'źle spał', source: 'guessed' }],
     }
-    expect(() => parseHandover(JSON.stringify(broken))).toThrow(UserFacingError)
+    expect(() => parseHandover(JSON.stringify(broken))).toThrow(AppError)
   })
 
   it('rejects a task without an owner field', () => {
     const broken = { ...valid, tasks_for_next_visit: [{ task: 'zakupy' }] }
-    expect(() => parseHandover(JSON.stringify(broken))).toThrow(UserFacingError)
+    expect(() => parseHandover(JSON.stringify(broken))).toThrow(AppError)
   })
 
   it('rejects a non-object response', () => {
-    expect(() => parseHandover('[]')).toThrow(UserFacingError)
+    expect(() => parseHandover('[]')).toThrow(AppError)
   })
 })

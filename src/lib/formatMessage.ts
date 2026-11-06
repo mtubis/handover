@@ -1,29 +1,25 @@
-import type { Area, Handover, Observation, Task } from '../ai/handover'
+import type { Handover, Observation, Task } from '../ai/handover'
+import { MESSAGES } from '../i18n/dictionaries'
+import type { Locale } from '../i18n/locale'
+import type { Messages } from '../i18n/messages'
 
-const AREA_LABELS: Record<Area, string> = {
-  health: 'Zdrowie',
-  sleep: 'Sen',
-  mood: 'Nastrój',
-  food: 'Jedzenie',
-  medication: 'Leki',
-  home: 'Dom',
-  other: 'Inne',
-}
-
-function formatDate(date: Date): string {
-  const day = String(date.getDate()).padStart(2, '0')
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  return `${day}.${month}`
+// A spelled-out month is unambiguous across languages ("10/21" reads differently in the US and the UK).
+function formatDate(date: Date, locale: Locale): string {
+  return new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(date)
 }
 
 /** Used both as the first line of the message and as the e-mail subject. */
-export function formatTitle(parentLabel: string, date: Date): string {
-  return `Handover · wizyta u ${parentLabel}, ${formatDate(date)}`
+export function formatTitle(personLabel: string, date: Date, locale: Locale): string {
+  return MESSAGES[locale].handover.title(personLabel, formatDate(date, locale))
 }
 
-function formatObservation(observation: Observation, parentLabel: string): string {
-  const area = AREA_LABELS[observation.area]
-  const source = observation.source === 'reported' ? ` (wg ${parentLabel})` : ''
+function formatObservation(
+  observation: Observation,
+  personLabel: string,
+  t: Messages['handover'],
+): string {
+  const area = t.areas[observation.area]
+  const source = observation.source === 'reported' ? ` (${t.reportedBy(personLabel)})` : ''
   return `- ${area}${source}: ${observation.note}`
 }
 
@@ -37,19 +33,25 @@ function section(heading: string, lines: string[]): string | null {
 
 const bullet = (item: string) => `- ${item}`
 
-export function formatMessage(handover: Handover, parentLabel: string, date: Date): string {
+export function formatMessage(
+  handover: Handover,
+  personLabel: string,
+  date: Date,
+  locale: Locale,
+): string {
+  const t = MESSAGES[locale].handover
   const summary = handover.summary.trim()
   const sections = [
-    formatTitle(parentLabel, date),
-    summary ? `Co u ${parentLabel}: ${summary}` : null,
+    formatTitle(personLabel, date, locale),
+    summary ? t.summary(personLabel, summary) : null,
     section(
-      'Zauważyłam/em:',
-      handover.observations.map((observation) => formatObservation(observation, parentLabel)),
+      t.observationsHeading,
+      handover.observations.map((observation) => formatObservation(observation, personLabel, t)),
     ),
-    section('Zrobione:', handover.done_during_visit.map(bullet)),
-    section('Do przejęcia:', handover.tasks_for_next_visit.map(formatTask)),
-    section('Nie sprawdzono:', handover.not_checked.map(bullet)),
-    section('Warto zwrócić uwagę:', handover.flags.map(bullet)),
+    section(t.doneHeading, handover.done_during_visit.map(bullet)),
+    section(t.tasksHeading, handover.tasks_for_next_visit.map(formatTask)),
+    section(t.notCheckedHeading, handover.not_checked.map(bullet)),
+    section(t.flagsHeading, handover.flags.map(bullet)),
   ]
   return sections.filter((part): part is string => part !== null).join('\n\n')
 }

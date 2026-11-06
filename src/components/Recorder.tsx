@@ -1,5 +1,7 @@
+import { useT } from '../i18n'
 import { formatDuration } from '../lib/audio'
 import { useRecorder, type Recording } from './useRecorder'
+import { useWarnBeforeUnload } from './useWarnBeforeUnload'
 
 interface Props {
   onRecorded: (recording: Recording) => void
@@ -7,7 +9,9 @@ interface Props {
 }
 
 export function Recorder({ onRecorded, onError }: Props) {
+  const t = useT()
   const { isRecording, elapsedSeconds, start, stop } = useRecorder()
+  useWarnBeforeUnload(isRecording)
 
   async function handleClick() {
     try {
@@ -28,10 +32,10 @@ export function Recorder({ onRecorded, onError }: Props) {
         className={`record-button${isRecording ? ' recording' : ''}`}
         onClick={handleClick}
       >
-        {isRecording ? 'Zakończ nagrywanie' : 'Nagraj notatkę'}
+        {isRecording ? t.recorder.stop : t.recorder.start}
       </button>
       <p className="timer" aria-live="polite">
-        {isRecording ? `Nagrywam… ${formatDuration(elapsedSeconds)}` : 'Opowiedz, jak minęła wizyta.'}
+        {isRecording ? t.recorder.recording(formatDuration(elapsedSeconds)) : t.recorder.prompt}
       </p>
     </div>
   )

@@ -1,4 +1,4 @@
-import { UserFacingError } from '../lib/errors'
+import { AppError } from '../lib/errors'
 
 export const AREAS = ['health', 'sleep', 'mood', 'food', 'medication', 'home', 'other'] as const
 export const SOURCES = ['observed', 'reported'] as const
@@ -69,16 +69,13 @@ export function isHandover(value: unknown): value is Handover {
   )
 }
 
-const INVALID_RESPONSE_MESSAGE =
-  'Nie udało się uporządkować notatki — odpowiedź AI miała nieoczekiwany format. Spróbuj ponownie.'
-
 export function parseHandover(text: string): Handover {
   let value: unknown
   try {
     value = JSON.parse(text)
   } catch {
-    throw new UserFacingError(INVALID_RESPONSE_MESSAGE)
+    throw new AppError('invalidResponse')
   }
-  if (!isHandover(value)) throw new UserFacingError(INVALID_RESPONSE_MESSAGE)
+  if (!isHandover(value)) throw new AppError('invalidResponse')
   return value
 }

@@ -46,6 +46,61 @@ h2 {
   font-size: 1.2rem;
 }
 
+.label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 6px;
+}
+
+.label-row label {
+  margin: 0;
+}
+
+button.help-icon {
+  width: 36px;
+  min-height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+.dialog {
+  width: min(560px, calc(100% - 32px));
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  border: 0;
+  border-radius: 16px;
+  padding: 20px;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.dialog::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+.dialog ol,
+.header-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px 12px;
+}
+
+h3 {
+  margin: 20px 0 4px;
+  font-size: 1.05rem;
+}
+
+.welcome ol {
+  padding-left: 1.4em;
+}
+
+.welcome li + li {
+  margin-top: 6px;
+}
+
 .tagline {
   margin-top: 0;
   color: var(--muted);
@@ -65,12 +120,14 @@ label {
 }
 
 input,
+select,
 textarea,
 button {
   font: inherit;
 }
 
 input,
+select,
 textarea {
   width: 100%;
   padding: 12px;
@@ -134,6 +191,21 @@ button.link {
   border-radius: 8px;
   background: var(--danger-bg);
   color: var(--danger);
+}
+
+.notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.notice p {
+  margin: 0;
 }
 
 .recorder {

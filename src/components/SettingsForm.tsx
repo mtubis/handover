@@ -1,31 +1,43 @@
 import { useState, type FormEvent } from 'react'
+import { useT, type Locale } from '../i18n'
 import type { Settings } from '../lib/settings'
+import { KeyHelp } from './KeyHelp'
+import { LanguageSelect } from './LanguageSelect'
 
 interface Props {
   initial: Settings
+  locale: Locale
+  /** Applied immediately, so the rest of the form can be read in the chosen language. */
+  onLocaleChange: (locale: Locale) => void
   onSave: (settings: Settings) => void
   onCancel?: () => void
 }
 
-export function SettingsForm({ initial, onSave, onCancel }: Props) {
+export function SettingsForm({ initial, locale, onLocaleChange, onSave, onCancel }: Props) {
+  const t = useT()
   const [apiKey, setApiKey] = useState(initial.apiKey)
-  const [parentLabel, setParentLabel] = useState(initial.parentLabel)
+  const [personLabel, setPersonLabel] = useState(initial.personLabel)
   const [recipients, setRecipients] = useState(initial.recipients)
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault()
     onSave({
       apiKey: apiKey.trim(),
-      parentLabel: parentLabel.trim() || 'mamy',
+      personLabel: personLabel.trim(),
       recipients: recipients.trim(),
     })
   }
 
   return (
     <form className="card" onSubmit={handleSubmit}>
-      <h2>Ustawienia</h2>
+      <h2>{t.settings.heading}</h2>
 
-      <label htmlFor="api-key">Klucz API Groq</label>
+      <LanguageSelect locale={locale} onChange={onLocaleChange} />
+
+      <div className="label-row">
+        <label htmlFor="api-key">{t.settings.apiKeyLabel}</label>
+        <KeyHelp trigger="icon" />
+      </div>
       <input
         id="api-key"
         type="password"
@@ -35,39 +47,37 @@ export function SettingsForm({ initial, onSave, onCancel }: Props) {
         onChange={(event) => setApiKey(event.target.value)}
         required
       />
-      <p className="hint">
-        Klucz zostaje tylko na tym urządzeniu i jest wysyłany wyłącznie do api.groq.com.
-      </p>
+      <p className="hint">{t.settings.apiKeyHint}</p>
 
-      <label htmlFor="parent-label">Wizyta u…</label>
+      <label htmlFor="person-label">{t.settings.personLabelLabel}</label>
       <input
-        id="parent-label"
+        id="person-label"
         type="text"
-        placeholder="mamy"
-        value={parentLabel}
-        onChange={(event) => setParentLabel(event.target.value)}
+        placeholder={t.handover.defaultPersonLabel}
+        value={personLabel}
+        onChange={(event) => setPersonLabel(event.target.value)}
       />
-      <p className="hint">Np. „mamy”, „taty”, „babci” — tak, jak w zdaniu „wizyta u mamy”.</p>
+      <p className="hint">{t.settings.personLabelHint}</p>
 
-      <label htmlFor="recipients">Adresy e-mail rodzeństwa (opcjonalnie)</label>
+      <label htmlFor="recipients">{t.settings.recipientsLabel}</label>
       <input
         id="recipients"
         type="text"
         inputMode="email"
         autoComplete="off"
-        placeholder="ania@example.com, maciej@example.com"
+        placeholder={t.settings.recipientsPlaceholder}
         value={recipients}
         onChange={(event) => setRecipients(event.target.value)}
       />
-      <p className="hint">Wstawiane jako adresaci po wybraniu „Wyślij e-mailem”.</p>
+      <p className="hint">{t.settings.recipientsHint}</p>
 
       <div className="actions">
         <button type="submit" className="primary">
-          Zapisz
+          {t.settings.save}
         </button>
         {onCancel && (
           <button type="button" onClick={onCancel}>
-            Anuluj
+            {t.settings.cancel}
           </button>
         )}
       </div>
