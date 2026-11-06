@@ -112,13 +112,15 @@ resuming work; update the checkboxes as steps are merged.
       recording. Mobile browsers often skip the prompt; step 8 is the real protection.
 
 ### 8. On-device draft — `feat/draft` (#9)
-- [ ] Persist step, transcript, message and visit date in `localStorage`; audio blob in IndexedDB
-      (no dependency).
-- [ ] After a reload during an API call, restore to "recording ready, try again".
-      A recording interrupted mid-capture is not recovered.
-- [ ] Delete the draft on "New note", via "Delete draft", and after a TTL (e.g. 24 h).
-- [ ] Update `CLAUDE.md`, `SPEC.md`, `README.md` and the in-app privacy text accordingly;
-      add a decision to `DECISIONS.md`.
+- [x] Persist step, transcript, message and subject (which carries the visit date) in
+      `localStorage`; audio blob in IndexedDB (no dependency), deleted once transcribed.
+- [x] After a reload during an API call, restore to "recording ready, try again" (or to the
+      editable note when structuring was interrupted). A recording interrupted mid-capture is not
+      recovered.
+- [x] Delete the draft on "New note" / "Record again", via "Delete draft", and after 24 h without
+      changes.
+- [x] Update `CLAUDE.md`, `SPEC.md`, `README.md` and the in-app privacy text accordingly;
+      add a decision to `DECISIONS.md` (18).
 
 ### 9. Release preparation — `docs/release` (#10)
 - [ ] README for a public audience: live link, screenshots/GIF, "what I'd do next".

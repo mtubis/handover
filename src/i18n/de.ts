@@ -64,7 +64,7 @@ export const de = {
     points: [
       'Handover hat keine Konten und keinen eigenen Server. Nichts, was du aufnimmst oder eintippst, landet bei uns.',
       'Deine Aufnahme und deine Notiz gehen direkt von deinem Gerät an Groq, nur zur Transkription und Strukturierung. Standardmäßig speichert Groq diese Daten nicht; Logs können bis zu 30 Tage aufbewahrt werden, um Fehler zu beheben oder Missbrauch zu untersuchen. Groq speichert Daten in den USA.',
-      'Dein API-Schlüssel und deine Einstellungen liegen nur in diesem Browser auf diesem Gerät. Wer diesen Browser nutzen kann, kann sie sehen – schütze dein Gerät wie gewohnt.',
+      'Dein API-Schlüssel, deine Einstellungen und eine angefangene Notiz (Aufnahme und Text) liegen nur in diesem Browser auf diesem Gerät. Die Notiz wird gelöscht, wenn du eine neue beginnst, auf „Entwurf löschen“ tippst oder nach 24 Stunden ohne Änderungen. Wer diesen Browser nutzen kann, kann diese Daten sehen – schütze dein Gerät wie gewohnt.',
       'Die fertige Nachricht geht nur dorthin, wo du sie teilst.',
     ],
     groqPolicyLink: 'So geht Groq mit deinen Daten um (auf Englisch)',
@@ -82,6 +82,10 @@ export const de = {
     recipientsHint: 'Diese Adressen werden beim Senden per E-Mail als Empfänger übernommen.',
     save: 'Speichern',
     cancel: 'Abbrechen',
+  },
+  draft: {
+    restored: (savedAt) => `Deine angefangene Notiz wurde wiederhergestellt (zuletzt gespeichert: ${savedAt}).`,
+    delete: 'Entwurf löschen',
   },
   recorder: {
     start: 'Notiz aufnehmen',

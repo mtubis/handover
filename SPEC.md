@@ -73,8 +73,8 @@ Warto zwrócić uwagę: ...
 
 ## Non-functional requirements
 - Works in mobile Chrome (Android) and Safari (iOS) over HTTPS.
-- No backend, no persistent storage of notes or transcripts.
-- A "Privacy" section in Settings states accurately where data goes (straight to Groq; Groq's retention and location; the key in this browser only) and links to Groq's data policy. No claims of "no risk".
+- No backend and no history of notes. A single unfinished draft (step, transcript, message, subject; the recording until it is transcribed) is kept on the device so a reload or a closed tab doesn't lose it. It is restored with a notice and a "Delete draft" action, and deleted on "New note" / "Record again" or after 24 hours without changes. A reload during an AI call lands on "recording kept, try again" or on the editable note; a recording interrupted mid-capture is not recovered.
+- A "Privacy" section in Settings states accurately where data goes (straight to Groq; Groq's retention and location; the key, settings and the draft in this browser only) and links to Groq's data policy. No claims of "no risk".
 - A failed transcription keeps the recording in memory and offers "Try again" with the same audio. The page asks for confirmation before it is left or reloaded while a recording is in progress, the AI is working, or a recording is not yet transcribed.
 - Readable error messages: missing key, microphone permission denied, API error (401/429 explained in plain words), invalid JSON from the LLM.
 - Recording format depends on the browser (WebM/Opus in Chrome, MP4/AAC in Safari); both are sent to Whisper as-is, with a correct file extension.
