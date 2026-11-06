@@ -62,7 +62,7 @@ export const en = {
     points: [
       'Handover has no accounts and no server of its own. Nothing you record or type reaches us.',
       'Your recording and note go directly from your device to Groq, only to be transcribed and organized. By default, Groq does not retain this data; it may keep logs for up to 30 days to troubleshoot errors or investigate abuse. Groq stores data in the USA.',
-      'Your API key and settings are kept only in this browser on this device. Anyone who can use this browser can see them, so protect your device as usual.',
+      'Your API key, your settings and an unfinished note (recording and text) are kept only in this browser on this device. The note is deleted when you start a new one, when you tap “Delete draft”, or after 24 hours without changes. Anyone who can use this browser can see this data, so protect your device as usual.',
       'The finished message goes only where you choose to share it.',
     ],
     groqPolicyLink: 'How Groq handles your data',
@@ -79,6 +79,10 @@ export const en = {
     recipientsHint: 'Added as recipients when you choose “Send by email”.',
     save: 'Save',
     cancel: 'Cancel',
+  },
+  draft: {
+    restored: (savedAt) => `Your unfinished note was restored (last saved ${savedAt}).`,
+    delete: 'Delete draft',
   },
   recorder: {
     start: 'Record a note',

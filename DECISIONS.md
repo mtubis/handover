@@ -27,7 +27,7 @@ Why the app is built the way it is: the main product and technical decisions, wi
 
 ## 3. Architecture: PWA without a backend
 
-- Notes about a parent's health are sensitive data. **No server = no storage** — data does not leave the device except for the AI API call. This is a product decision (privacy, GDPR).
+- Notes about a parent's health are sensitive data. **No server = no storage** — data does not leave the device except for the AI API call. This is a product decision (privacy, GDPR). Relaxed later for a single on-device draft (decision 18).
 - PWA instead of a native app: the caregiver does not need to install anything from an app store; recording (MediaRecorder) and Web Share work in mobile Chrome and Safari over HTTPS.
 - A deliberate choice despite the author's backend background (PHP/Symfony, Python): a backend would add nothing here and would increase the risk surface.
 - **Known limitation:** the API key is stored in `localStorage` and used from the browser. Users bring their own keys, so no shared key and no user data ever sit on a server; a version with shared access would call the AI through a backend with a server-side key.
@@ -192,8 +192,28 @@ These rules came out of testing the prompt before implementation: a simple test 
 - A `beforeunload` warning covers the moments when a reload would lose work that cannot be
   rebuilt: while recording, while waiting for the AI, and while a recording is not transcribed
   yet. It is deliberately not active on the transcript and message screens, where it would fire
-  after almost every use; those are covered by the on-device draft (step 8 of `PLAN.md`).
+  after almost every use; those are covered by the on-device draft (decision 18).
 - Browsers show their own text in that prompt and mobile browsers often skip it, so it is a
   safety net on desktop rather than a guarantee.
 - In the component test the recorder is replaced by a button that returns a blob: `MediaRecorder`
   is a browser boundary and is mocked there rather than emulated.
+
+### 18. On-device draft instead of "nothing is stored"
+- On a phone a note gets lost easily: the browser reloads a backgrounded tab, the screen is
+  pulled down, the PWA is closed. The `beforeunload` prompt (decision 17) does not help there.
+  So the note in progress is kept on the device: the step, transcript, message and subject in
+  `localStorage`, the recording in IndexedDB (`localStorage` holds strings only and is too small).
+- This relaxes "no storage" from decision 3 on purpose, within limits: one draft, not a history;
+  on the device only; deleted on "New note", "Record again", "Delete draft", or after 24 hours
+  without changes. The audio is deleted as soon as it is transcribed, since the transcript is
+  what the rest of the flow needs. The in-app privacy text says this.
+- A reload during an AI call never restores a spinner that would wait forever: an interrupted
+  transcription lands on "recording kept, try again", an interrupted structuring on the editable
+  note. A recording interrupted mid-capture is not recovered: chunking audio into storage while
+  recording would be much more code for a rare case.
+- The visit date is not stored separately: it is already part of the subject and the message,
+  which are restored as they were (including the user's edits).
+- IndexedDB is wrapped in about 60 lines of plain API code instead of a library. Every call
+  swallows errors, so without IndexedDB (some private modes, jsdom) the app works as before and
+  only the recording is not restored. In component tests the module is mocked at that boundary.
+

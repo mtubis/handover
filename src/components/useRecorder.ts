@@ -1,11 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { fileNameForMimeType, pickMimeType } from '../lib/audio'
+import { fileNameForMimeType, pickMimeType, type Recording } from '../lib/audio'
 import { AppError } from '../lib/errors'
 
-export interface Recording {
-  blob: Blob
-  fileName: string
-}
+export type { Recording }
 
 interface ActiveRecording {
   recorder: MediaRecorder

@@ -62,7 +62,7 @@ export const pl = {
     points: [
       'Handover nie ma kont ani własnego serwera. Nic z tego, co nagrasz lub wpiszesz, do nas nie trafia.',
       'Nagranie i notatka trafiają z Twojego urządzenia prosto do Groq, wyłącznie do transkrypcji i uporządkowania. Groq domyślnie nie przechowuje tych danych; może zachować logi do 30 dni w celu diagnozy błędów lub wykrywania nadużyć. Groq przechowuje dane w USA.',
-      'Klucz API i ustawienia są zapisane tylko w tej przeglądarce na tym urządzeniu. Każdy, kto ma dostęp do tej przeglądarki, może je zobaczyć — zabezpiecz urządzenie jak zwykle.',
+      'Klucz API, ustawienia i niedokończona notatka (nagranie i tekst) są zapisane tylko w tej przeglądarce na tym urządzeniu. Notatka jest usuwana, gdy zaczynasz nową, gdy stukniesz „Usuń szkic” albo po 24 godzinach bez zmian. Każdy, kto ma dostęp do tej przeglądarki, może te dane zobaczyć — zabezpiecz urządzenie jak zwykle.',
       'Gotowa wiadomość trafia tylko tam, gdzie ją udostępnisz.',
     ],
     groqPolicyLink: 'Jak Groq postępuje z danymi (po angielsku)',
@@ -79,6 +79,10 @@ export const pl = {
     recipientsHint: 'Wstawiane jako adresaci po wybraniu „Wyślij e-mailem”.',
     save: 'Zapisz',
     cancel: 'Anuluj',
+  },
+  draft: {
+    restored: (savedAt) => `Przywrócono niedokończoną notatkę (ostatni zapis: ${savedAt}).`,
+    delete: 'Usuń szkic',
   },
   recorder: {
     start: 'Nagraj notatkę',

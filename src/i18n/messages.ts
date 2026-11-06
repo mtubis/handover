@@ -64,6 +64,11 @@ export interface Messages {
     save: string
     cancel: string
   }
+  /** A note restored after a reload or a closed tab. */
+  draft: {
+    restored: (savedAt: string) => string
+    delete: string
+  }
   recorder: {
     start: string
     stop: string

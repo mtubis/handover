@@ -25,7 +25,7 @@ Scope details: `SPEC.md`. Rationale behind decisions: `DECISIONS.md`. Read both 
 - Deploy: Vercel, auto-deploy from GitHub. **Phone testing happens on the Vercel deployment** (HTTPS is required for microphone and Web Share; the WSL dev server is not reachable from the phone).
 
 ## Hard constraints
-- **No server and no persistent storage of notes.** Data stays on the device except for the AI API call itself. Do not add a backend, database, or analytics.
+- **No server and no history of notes.** Data stays on the device except for the AI API call itself. Do not add a backend, database, or analytics. The only stored note is a single unfinished draft (`src/lib/draft.ts`, audio in IndexedDB via `src/lib/draftAudio.ts`), kept on the device until the user starts a new note, deletes it, or 24 hours pass; the audio is deleted as soon as it is transcribed.
 - **The app does not diagnose anything.** The LLM organizes what the caregiver said. It must not add medical interpretations, recommendations, urgency assessments, people, or dates that were not in the note.
 - The human has the final say: the transcript and the message are editable before sending.
 - The UI is multilingual (English, Polish, German): no user-facing string is hard-coded in one language. Code, identifiers, comments, and docs in English. The product name "Handover" is never translated.

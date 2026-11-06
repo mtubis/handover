@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { structure, transcribe } from './ai/groq'
+import { DraftNotice } from './components/DraftNotice'
 import { MessagePreview } from './components/MessagePreview'
 import { Privacy } from './components/Privacy'
 import { Recorder } from './components/Recorder'
@@ -9,6 +10,8 @@ import { ShareActions } from './components/ShareActions'
 import type { Recording } from './components/useRecorder'
 import { useWarnBeforeUnload } from './components/useWarnBeforeUnload'
 import { I18nProvider, MESSAGES, loadLocale, saveLocale, type Locale } from './i18n'
+import { clearDraft, loadDraft, saveDraft, type Draft, type DraftStep } from './lib/draft'
+import { deleteDraftAudio, loadDraftAudio, saveDraftAudio } from './lib/draftAudio'
 import { describeError } from './lib/errors'
 import { formatMessage, formatTitle } from './lib/formatMessage'
 import { hasSeenWelcome, markWelcomeSeen } from './lib/onboarding'
@@ -19,6 +22,30 @@ type Step = 'record' | 'transcribing' | 'transcribeFailed' | 'transcript' | 'str
 // Kept as the cause, not as text, so the message follows the current UI language.
 type ErrorState = { cause: unknown } | null
 
+// Where a reload lands: an interrupted API call is shown as "recording kept, try again" or as the
+// editable note again, never as a spinner that would wait forever.
+function draftStepFor(step: Step, transcript: string): DraftStep | null {
+  switch (step) {
+    case 'transcribing':
+    case 'transcribeFailed':
+      return 'recording'
+    case 'structuring':
+      return 'transcript'
+    case 'transcript':
+      return transcript.trim() === '' ? null : 'transcript'
+    case 'message':
+      return 'message'
+    case 'record':
+      return null
+  }
+}
+
+function initialStep(draft: Draft | null): Step {
+  if (draft === null) return 'record'
+  // The recording itself is loaded from IndexedDB after the first render.
+  return draft.step === 'recording' ? 'transcribeFailed' : draft.step
+}
+
 export default function App() {
   const [locale, setLocale] = useState<Locale>(loadLocale)
   const t = MESSAGES[locale]
@@ -28,10 +55,13 @@ export default function App() {
   const [showWelcome, setShowWelcome] = useState(() => !hasSeenWelcome() && settings.apiKey === '')
   const [editingSettings, setEditingSettings] = useState(() => settings.apiKey === '')
   const [storageWarning, setStorageWarning] = useState(false)
-  const [step, setStep] = useState<Step>('record')
-  const [transcript, setTranscript] = useState('')
-  const [message, setMessage] = useState('')
-  const [subject, setSubject] = useState('')
+  const [initialDraft] = useState(loadDraft)
+  // While set, a notice says the note was restored and offers to delete it.
+  const [restoredAt, setRestoredAt] = useState(initialDraft?.savedAt ?? null)
+  const [step, setStep] = useState<Step>(() => initialStep(initialDraft))
+  const [transcript, setTranscript] = useState(initialDraft?.transcript ?? '')
+  const [message, setMessage] = useState(initialDraft?.message ?? '')
+  const [subject, setSubject] = useState(initialDraft?.subject ?? '')
   const [error, setError] = useState<ErrorState>(null)
   // Kept after a failed transcription, so a network hiccup or a rate limit doesn't cost the note.
   const [pendingRecording, setPendingRecording] = useState<Recording | null>(null)
@@ -43,6 +73,33 @@ export default function App() {
   useEffect(() => {
     document.documentElement.lang = locale
   }, [locale])
+
+  useEffect(() => {
+    if (initialDraft?.step !== 'recording') {
+      // Also removes a recording left behind by an expired or deleted draft.
+      void deleteDraftAudio()
+      return
+    }
+    let cancelled = false
+    void loadDraftAudio().then((recording) => {
+      if (cancelled) return
+      if (recording) {
+        setPendingRecording(recording)
+      } else {
+        setRestoredAt(null)
+        setStep('record')
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [initialDraft])
+
+  useEffect(() => {
+    const draftStep = draftStepFor(step, transcript)
+    if (draftStep === null) clearDraft()
+    else saveDraft({ step: draftStep, transcript, message, subject })
+  }, [step, transcript, message, subject])
 
   function handleLocaleChange(next: Locale) {
     setStorageWarning(!saveLocale(next))
@@ -66,11 +123,15 @@ export default function App() {
 
   async function transcribeRecording(recording: Recording) {
     setError(null)
+    setRestoredAt(null)
     setStep('transcribing')
+    void saveDraftAudio(recording)
     try {
       setTranscript(await transcribe(recording.blob, recording.fileName, locale, settings.apiKey))
       setPendingRecording(null)
       setStep('transcript')
+      // The transcript is what the draft needs from now on; the audio is not kept longer than that.
+      void deleteDraftAudio()
     } catch (cause) {
       showError(cause)
       setPendingRecording(recording)
@@ -80,12 +141,15 @@ export default function App() {
 
   function discardRecording() {
     setError(null)
+    setRestoredAt(null)
     setPendingRecording(null)
+    void deleteDraftAudio()
     setStep('record')
   }
 
   async function handlePrepareMessage() {
     setError(null)
+    setRestoredAt(null)
     setStep('structuring')
     try {
       const handover = await structure(transcript, personLabel, locale, settings.apiKey)
@@ -99,11 +163,15 @@ export default function App() {
     }
   }
 
+  // Also "Delete draft": the draft is exactly the note in progress.
   function startOver() {
     setError(null)
+    setRestoredAt(null)
     setPendingRecording(null)
+    void deleteDraftAudio()
     setTranscript('')
     setMessage('')
+    setSubject('')
     setStep('record')
   }
 
@@ -149,6 +217,10 @@ export default function App() {
         ) : (
           <section className="card">
             <h2>{t.app.noteHeading(personLabel)}</h2>
+
+            {restoredAt !== null && (
+              <DraftNotice savedAt={restoredAt} locale={locale} onDelete={startOver} />
+            )}
 
             {error && (
               <p role="alert" className="error">

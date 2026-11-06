@@ -28,8 +28,10 @@ written in the same language. Scope: [`SPEC.md`](SPEC.md). Rationale: [`DECISION
 
 ## Privacy
 
-- No backend, no database, no analytics. Notes, transcripts and messages exist only in the page's
-  memory and disappear when it is closed.
+- No backend, no database, no analytics, no history of notes. Only the note in progress is kept on
+  the device (text in `localStorage`, the recording in IndexedDB until it is transcribed), so a
+  reload doesn't lose it. It is deleted when a new note is started, on "Delete draft", or after
+  24 hours without changes.
 - The only network traffic with note content is the call to the Groq API. According to
   [Groq's data policy](https://console.groq.com/docs/your-data), inference data is not retained by
   default, but may be logged for up to 30 days to troubleshoot errors or investigate abuse; Groq
