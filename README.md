@@ -10,7 +10,7 @@ and what was not checked — ready to share with a single tap.
 It started with adult siblings taking turns looking after an aging parent, where news from each visit
 easily gets lost between them — still the case Handover is designed around first.
 
-**Try it:** [handover-mtubis.vercel.app](https://handover-mtubis.vercel.app) — on a phone, in Chrome
+**Try it:** [handover-eight-ecru.vercel.app](https://handover-eight-ecru.vercel.app) — on a phone, in Chrome
 or Safari. You need a free [Groq API key](https://console.groq.com/keys); the app explains how to
 get one.
 
