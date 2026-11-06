@@ -41,6 +41,8 @@ export const pl = {
     privacyHeading: 'Co dzieje się z Twoimi danymi?',
     privacy:
       'Nie musisz zakładać konta w Handover. Nagranie i tekst notatki są przesyłane bezpośrednio do Groq w celu transkrypcji i uporządkowania. Handover nie zapisuje ich na swoim serwerze.',
+    disclaimer:
+      'Handover nie jest wyrobem medycznym i nie ocenia niczyjego zdrowia. Jeśli coś Cię niepokoi, skontaktuj się z lekarzem, a w nagłej sytuacji zadzwoń pod numer alarmowy.',
     start: 'Zacznij',
   },
   keyHelp: {

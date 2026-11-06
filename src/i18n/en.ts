@@ -41,6 +41,8 @@ export const en = {
     privacyHeading: 'What happens to your data?',
     privacy:
       'You don’t need a Handover account. Your recording and note text are sent directly to Groq for transcription and structuring. Handover does not store them on its own server.',
+    disclaimer:
+      'Handover is not a medical device and does not assess anyone’s health. If something worries you, contact a doctor; in an emergency, call the emergency number.',
     start: 'Get started',
   },
   keyHelp: {
